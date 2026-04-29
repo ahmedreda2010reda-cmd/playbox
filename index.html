@@ -3,399 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DELONI | وكالة نمو رقمية وتكنولوجية</title>
+    <title>DELONI | وكالة الإبداع الرقمي</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Noto+Sans+Arabic:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <!-- GSAP for Animations -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF5C00', // برتقالي ساطع احترافي
+                        secondary: '#FF8A4D',
+                        accent: '#1A1A1A',
+                        bglight: '#FAF9F6',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans Arabic', 'sans-serif'],
+                        heading: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;700;900&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP & Plugins -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
         :root {
-            --primary: #00B67A; 
-            --bg-dark: #050505;
-            --accent: #0057FF; /* Royal Blue for Tech feel */
+            --primary: #FF5C00;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: #0c0c0c;
             color: #ffffff;
-            font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
             overflow-x: hidden;
-            margin: 0;
+            font-family: 'Noto Sans Arabic', sans-serif;
         }
 
-        /* 1. Pre-loader with letter D */
-        #loader {
+        /* Animated Gradient Background */
+        .bg-mesh {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100vh;
-            background: #000;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0c0c0c 100%);
         }
-
-        .loader-svg {
-            width: 150px;
-            overflow: visible;
-        }
-
-        #d-path {
-            fill: none;
-            stroke: var(--primary);
-            stroke-width: 4;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-        }
-
-        /* 2. Cursor Customization */
-        #cursor {
-            width: 10px;
-            height: 10px;
+        .bg-blob {
+            position: absolute;
+            width: 500px; height: 500px;
             background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.15;
             border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            box-shadow: 0 0 20px var(--primary);
-        }
-
-        /* 3. Hero Section */
-        #canvas-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
             z-index: -1;
         }
 
-        .hero-title {
-            font-size: clamp(2.5rem, 8vw, 7rem);
-            line-height: 1;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .text-reveal {
-            overflow: hidden;
-            display: block;
-        }
-
-        /* 4. Bento Grid Styles */
-        .bento-card {
-            background: rgba(15, 15, 15, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 32px;
-            padding: 2.5rem;
-            position: relative;
-            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
-            backdrop-filter: blur(12px);
-        }
-
-        .bento-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px rgba(0, 182, 122, 0.1);
-            transform: scale(1.02);
-        }
-
-        /* 5. Horizontal Scroll */
-        .horizontal-container {
-            display: flex;
-            width: 300vw;
-            padding-right: 10vw;
-        }
-
-        .case-card {
-            width: 70vw;
-            height: 70vh;
-            margin-left: 5vw;
-            background: linear-gradient(145deg, #111, #050505);
-            border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            padding: 4rem;
-        }
-
-        .btn-glow {
+        /* Creative Buttons */
+        .btn-creative {
             background: var(--primary);
-            color: #000;
-            padding: 1.2rem 3rem;
+            color: white;
+            padding: 18px 45px;
+            border-radius: 12px;
             font-weight: 800;
-            border-radius: 100px;
-            box-shadow: 0 10px 30px rgba(0, 182, 122, 0.3);
-            transition: 0.4s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .btn-creative::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 0%; height: 100%;
+            background: white; transition: all 0.5s; z-index: -1;
+        }
+        .btn-creative:hover::before { width: 100%; left: 0; }
+        .btn-creative:hover { color: var(--primary); transform: scale(1.05); }
+
+        /* Card Hover Animations */
+        .service-card {
+            background: #151515;
+            border: 1px solid rgba(255, 92, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        .service-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 92, 0, 0.1);
         }
 
-        .btn-glow:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 182, 122, 0.5);
+        /* Portfolio Reveal */
+        .portfolio-box {
+            overflow: hidden;
+            position: relative;
+            border-radius: 20px;
+        }
+        .portfolio-img {
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .portfolio-box:hover .portfolio-img {
+            transform: scale(1.1) rotate(2deg);
         }
 
-        .code-text {
-            font-family: 'Courier New', monospace;
-            color: var(--primary);
-            opacity: 0.6;
+        /* Custom Cursor Placeholder for Animation */
+        .cursor-follower {
+            position: fixed;
+            width: 20px; height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.5;
+            mix-blend-mode: difference;
+        }
+
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 92, 0, 0.4);
         }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <div id="cursor"></div>
+    <!-- Background Elements -->
+    <div class="bg-mesh"></div>
+    <div class="bg-blob" id="blob1" style="top: -10%; left: -10%;"></div>
+    <div class="bg-blob" id="blob2" style="bottom: 10%; right: 10%;"></div>
 
-    <!-- 1. Pre-loader with D shape -->
-    <div id="loader">
-        <svg class="loader-svg" viewBox="0 0 100 100">
-            <!-- Professional D Shape Path -->
-            <path id="d-path" d="M30,20 L30,80 C30,80 75,80 75,50 C75,20 30,20 30,20 Z M45,35 L45,65 C45,65 60,65 60,50 C60,35 45,35 45,35 Z" />
-        </svg>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full p-8 z-50 mix-blend-difference" id="navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-3xl font-black font-heading tracking-tighter">DELONI<span class="text-primary">.</span></div>
+            <div class="hidden md:flex gap-12 font-bold text-sm tracking-widest uppercase">
+                <a href="#about" class="hover:text-primary transition">القصة</a>
+                <a href="#services" class="hover:text-primary transition">الخدمات</a>
+                <a href="#portfolio" class="hover:text-primary transition">الأعمال</a>
+                <a href="#contact" class="hover:text-primary transition">تواصل</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
+            
+            <div class="hero-text z-10">
+                <div class="overflow-hidden mb-4">
+                    <span class="block text-primary font-black tracking-widest uppercase text-sm gs-y-reveal">استديو إبداعي متكامل</span>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black leading-none mb-8 gs-y-reveal">
+                    نفكر <span class="text-primary italic">بجرأة</span><br>
+                    ننفذ <span class="text-outline">بذكاء</span>
+                </h1>
+                <p class="text-lg text-gray-400 max-w-lg mb-10 leading-relaxed gs-y-reveal">
+                    نحن وكالة ديلوني، نحول الأفكار المعقدة إلى تجارب رقمية بسيطة ومؤثرة. متخصصون في بناء البرندات التي لا يمكن تجاهلها.
+                </p>
+                <div class="gs-y-reveal">
+                    <a href="#contact" class="btn-creative">
+                        دعنا نبدع سوياً <i class="fas fa-bolt"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative hidden md:block">
+                <!-- Abstract Animated Shape -->
+                <div class="relative w-full aspect-square flex items-center justify-center">
+                    <div class="absolute w-4/5 h-4/5 border-2 border-primary/20 rounded-full animate-pulse"></div>
+                    <div class="absolute w-full h-full border border-primary/10 rounded-[40%] animate-[spin_20s_linear_infinite]"></div>
+                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Digital Art" 
+                         class="w-4/5 h-4/5 object-cover rounded-3xl grayscale hover:grayscale-0 transition-all duration-700 shadow-[0_0_80px_rgba(255,92,0,0.2)]">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Marquee -->
+    <div class="py-10 bg-primary overflow-hidden">
+        <div class="flex whitespace-nowrap animate-[marquee_20s_linear_infinite] gap-20 items-center">
+            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">BRANDING</span>
+            <span class="text-3xl font-black text-black uppercase tracking-tighter">WEB DESIGN</span>
+            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">MARKETING</span>
+            <span class="text-3xl font-black text-black uppercase tracking-tighter">STRATEGY</span>
+            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">SEO</span>
+            <span class="text-3xl font-black text-black uppercase tracking-tighter">SOCIAL MEDIA</span>
+            <!-- Repeat for seamless loop -->
+            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">BRANDING</span>
+            <span class="text-3xl font-black text-black uppercase tracking-tighter">WEB DESIGN</span>
+            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">MARKETING</span>
+        </div>
     </div>
 
-    <div id="canvas-container"></div>
-
-    <main id="smooth-content">
-        <!-- 2. Hero Section -->
-        <section class="h-screen flex flex-col justify-center px-8 md:px-20">
-            <nav class="fixed top-0 left-0 w-full p-8 flex justify-between items-center z-50">
-                <div class="text-3xl font-black tracking-tighter">DELONI</div>
-                <div class="space-x-10 space-x-reverse hidden md:flex font-bold text-sm uppercase tracking-widest">
-                    <a href="#about" class="hover:text-emerald-500">من نحن</a>
-                    <a href="#work" class="hover:text-emerald-500">أعمالنا</a>
-                    <a href="#contact" class="hover:text-emerald-500">تحدث إلينا</a>
-                </div>
-            </nav>
-
-            <div class="max-w-5xl">
-                <span class="code-text block mb-4 animate-pulse">// GROWTH SYSTEMS ENGINEERED FOR SUCCESS</span>
-                <h1 class="hero-title">
-                    <span class="text-reveal">نصمم، نبرمج،</span>
-                    <span class="text-reveal text-emerald-500">ونضاعف أرباحك</span>
-                </h1>
-                <p class="mt-8 text-xl text-gray-400 max-w-2xl leading-relaxed">
-                    نحن وكالة نمو متكاملة تدمج بين استراتيجيات التسويق المدفوع، هندسة البرمجيات، والتصاميم التي تبيع. لا نقدم وعوداً، نقدم أنظمة استحواذ.
-                </p>
-                <div class="mt-12 flex space-x-6 space-x-reverse">
-                    <button class="btn-glow">ابدأ مشروعك</button>
-                    <button class="border border-white/20 px-10 py-4 rounded-full font-bold hover:bg-white/5 transition">مشاهدة النتائج</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Tech Strategy Grid (Bento) -->
-        <section class="py-32 px-8 md:px-20">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[350px]">
-                <!-- Lead Gen Box -->
-                <div class="bento-card md:col-span-2 overflow-hidden">
-                    <div class="relative z-10">
-                        <div class="text-xs font-mono text-emerald-500 mb-2">01. MARKETING OPS</div>
-                        <h3 class="text-3xl font-bold">توليد العملاء (Leads)</h3>
-                        <p class="text-gray-400 mt-4">بناء مسارات تحويل (Funnels) مخصصة تستهدف عملاءك بدقة 99%.</p>
-                    </div>
-                    <div class="absolute bottom-0 right-0 w-full h-32 bg-gradient-to-t from-emerald-500/20 to-transparent"></div>
-                </div>
-
-                <!-- Coding Box -->
-                <div class="bento-card flex flex-col justify-between">
-                    <div>
-                        <div class="text-xs font-mono text-blue-500 mb-2">02. DEVELOPMENT</div>
-                        <h3 class="text-2xl font-bold">برمجيات ذكية</h3>
-                    </div>
-                    <div class="text-sm font-mono opacity-40">
-                        const growth = () => { <br>
-                          revenue.multiply(10); <br>
-                        }
-                    </div>
-                </div>
-
-                <!-- Design Box -->
-                <div class="bento-card flex flex-col justify-between">
-                    <div>
-                        <div class="text-xs font-mono text-purple-500 mb-2">03. CREATIVE</div>
-                        <h3 class="text-2xl font-bold">تصميم يحول</h3>
-                    </div>
-                    <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                        <div class="w-3/4 h-full bg-emerald-500"></div>
-                    </div>
-                </div>
-
-                <!-- Big Result Box -->
-                <div class="bento-card md:col-span-4 flex items-center justify-between">
-                    <div class="max-w-md">
-                        <h3 class="text-4xl font-black mb-4">أرقام لا تكذب</h3>
-                        <p class="text-gray-400">ساعدنا أكثر من 50 علامة تجارية في الخليج على تحقيق عوائد تتجاوز 10x من الإنفاق الإعلاني.</p>
-                    </div>
-                    <div class="hidden md:block text-8xl font-black text-white/5 tracking-tighter">ROI 15X</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. Portfolio Horizontal -->
-        <section id="work" class="py-20 bg-white/5">
-            <div class="px-8 md:px-20 mb-20 flex justify-between items-end">
+    <!-- Services Section -->
+    <section id="services" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-20 mb-24 items-end">
                 <div>
-                    <h2 class="text-6xl font-bold">مشاريع استراتيجية</h2>
-                    <p class="text-gray-500 mt-4">كيف قمنا ببناء أنظمة النمو لعملائنا.</p>
+                    <h2 class="text-5xl md:text-7xl font-black mb-8">ماذا <span class="text-primary">نقدم؟</span></h2>
+                    <p class="text-gray-500 text-xl">خدماتنا مصممة للشركات التي لا تقبل بالحلول التقليدية وترغب في التميز الحقيقي.</p>
+                </div>
+                <div class="flex justify-end">
+                    <div class="text-right">
+                        <div class="text-8xl font-black text-primary/10">04</div>
+                        <div class="text-primary font-bold">ركائز أساسية للنمو</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="horizontal-scroll-section overflow-hidden">
-                <div class="horizontal-container">
-                    <div class="case-card">
-                        <div>
-                            <div class="text-emerald-500 mb-4">MARKETING + DEV</div>
-                            <h4 class="text-5xl font-bold mb-6">متجر أثاث عالمي</h4>
-                            <p class="text-xl text-gray-400 mb-8">إعادة بناء الموقع بالكامل + استراتيجية Ads أدت لزيادة المبيعات بنسبة 400%.</p>
-                            <a href="#" class="text-emerald-500 font-bold border-b border-emerald-500">اقرأ الحالة</a>
-                        </div>
-                    </div>
-                    <div class="case-card">
-                        <div>
-                            <div class="text-blue-500 mb-4">SYSTEM DESIGN</div>
-                            <h4 class="text-5xl font-bold mb-6">منصة عقارات ذكية</h4>
-                            <p class="text-xl text-gray-400 mb-8">برمجة لوحة تحكم وإدارة عملاء (CRM) لشركة مقاولات ضخمة في الرياض.</p>
-                            <a href="#" class="text-blue-500 font-bold border-b border-blue-500">اقرأ الحالة</a>
-                        </div>
-                    </div>
-                    <div class="case-card">
-                        <div>
-                            <div class="text-purple-500 mb-4">BRANDING + ADS</div>
-                            <h4 class="text-5xl font-bold mb-6">شركة أجهزة منزلية</h4>
-                            <p class="text-xl text-gray-400 mb-8">حملة تسويقية متكاملة حققت 2000 عميل محتمل خلال أول أسبوعين.</p>
-                            <a href="#" class="text-purple-500 font-bold border-b border-purple-500">اقرأ الحالة</a>
-                        </div>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="service-card p-10 rounded-3xl gs-reveal">
+                    <div class="text-primary text-4xl mb-8"><i class="fas fa-fingerprint"></i></div>
+                    <h3 class="text-2xl font-black mb-4">الهوية البصرية</h3>
+                    <p class="text-gray-500 mb-8">نصنع وجهاً لعلامتك التجارية يعبر عن قيمك ويجذب جمهورك المستهدف من النظرة الأولى.</p>
+                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
+                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="service-card p-10 rounded-3xl gs-reveal">
+                    <div class="text-primary text-4xl mb-8"><i class="fas fa-code"></i></div>
+                    <h3 class="text-2xl font-black mb-4">تطوير المواقع</h3>
+                    <p class="text-gray-500 mb-8">مواقع سريعة، متجاوبة، ومصممة لتجربة مستخدم تجعل العميل يقع في حب علامتك.</p>
+                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
+                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="service-card p-10 rounded-3xl gs-reveal">
+                    <div class="text-primary text-4xl mb-8"><i class="fas fa-bullhorn"></i></div>
+                    <h3 class="text-2xl font-black mb-4">التسويق الرقمي</h3>
+                    <p class="text-gray-500 mb-8">حملات إعلانية ذكية تعتمد على البيانات وليس التخمين لضمان أفضل عائد.</p>
+                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
+                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
+                    </a>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="service-card p-10 rounded-3xl gs-reveal">
+                    <div class="text-primary text-4xl mb-8"><i class="fas fa-pencil-ruler"></i></div>
+                    <h3 class="text-2xl font-black mb-4">صناعة المحتوى</h3>
+                    <p class="text-gray-500 mb-8">نروي قصة علامتك التجارية من خلال محتوى بصري وكتابي يخلق تفاعلاً حقيقياً.</p>
+                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
+                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
+                    </a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 5. Footer -->
-        <footer id="contact" class="py-40 px-8 text-center relative overflow-hidden">
-            <div class="z-10 relative">
-                <h2 class="text-8xl font-black mb-10 tracking-tighter">لنبدأ <span class="text-emerald-500">النمو</span></h2>
-                <p class="text-gray-500 text-xl max-w-2xl mx-auto mb-16">نحن نختار شركاءنا بعناية. هل مشروعك القادم هو قصة نجاحنا التالية؟</p>
-                <button class="btn-glow text-2xl px-20">تواصل مع خبير نمو</button>
-            </div>
+    <!-- Portfolio (Modern Grid) -->
+    <section id="portfolio" class="py-32 px-6 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-5xl font-black mb-20 text-center">مشاريع <span class="text-outline">مختارة</span></h2>
             
-            <div class="mt-40 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between text-gray-500 text-sm">
-                <p>© 2024 DELONI AGENCY. DESIGNED TO SCALE.</p>
-                <div class="flex space-x-10 space-x-reverse mt-6 md:mt-0">
-                    <a href="#">INSTAGRAM</a>
-                    <a href="#">LINKEDIN</a>
-                    <a href="#">X.COM</a>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Project 1 -->
+                <div class="gs-reveal group">
+                    <div class="portfolio-box aspect-video mb-6">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop" class="portfolio-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                            <span class="text-black font-black text-2xl">مشاهدة المشروع</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-black">ساعة "أورا" الذكية</h3>
+                            <p class="text-gray-500">تصميم منتج + هوية بصرية</p>
+                        </div>
+                        <div class="text-primary text-2xl"><i class="fas fa-external-link-alt"></i></div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="gs-reveal group mt-12 md:mt-24">
+                    <div class="portfolio-box aspect-video mb-6">
+                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1200&auto=format&fit=crop" class="portfolio-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                            <span class="text-black font-black text-2xl">مشاهدة المشروع</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-black">منصة "سايبر" للتعليم</h3>
+                            <p class="text-gray-500">برمجة تطبيقات + واجهة مستخدم</p>
+                        </div>
+                        <div class="text-primary text-2xl"><i class="fas fa-external-link-alt"></i></div>
+                    </div>
                 </div>
             </div>
-        </footer>
-    </main>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-40 px-6 relative">
+        <div class="max-w-5xl mx-auto text-center">
+            <h2 class="text-6xl md:text-9xl font-black mb-12 gs-reveal">هل أنت <br><span class="text-primary">مستعد؟</span></h2>
+            <p class="text-2xl text-gray-400 mb-16 gs-reveal">لنصنع شيئاً عظيماً يغير قواعد اللعبة في مجالك.</p>
+            <div class="gs-reveal">
+                <a href="mailto:hello@deloni.agency" class="text-4xl md:text-6xl font-black border-b-4 border-primary hover:text-primary transition-all">
+                    hello@deloni.agency
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 border-t border-white/5 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="text-3xl font-black font-heading">DELONI<span class="text-primary">.</span></div>
+            <div class="flex gap-8 text-gray-500 font-bold uppercase text-xs tracking-widest">
+                <a href="#" class="hover:text-primary transition">انستقرام</a>
+                <a href="#" class="hover:text-primary transition">لينكد إن</a>
+                <a href="#" class="hover:text-primary transition">تويتر</a>
+            </div>
+            <div class="text-gray-600 text-sm">© 2024 جميع الحقوق محفوظة لوكالة ديلوني</div>
+        </div>
+    </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. Preloader D Path Animation
+        // Custom Cursor Follower Animation
+        const blob1 = document.getElementById('blob1');
+        const blob2 = document.getElementById('blob2');
+
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(blob1, { x: e.clientX * 0.1, y: e.clientY * 0.1, duration: 1 });
+            gsap.to(blob2, { x: -e.clientX * 0.1, y: -e.clientY * 0.1, duration: 1 });
+        });
+
+        // Intro Animations
         window.onload = () => {
             const tl = gsap.timeline();
-            tl.to("#d-path", {
-                strokeDashoffset: 0,
-                duration: 2.5,
-                ease: "power4.inOut"
-            })
-            .to("#loader", {
-                yPercent: -100,
-                duration: 1.2,
-                ease: "expo.inOut"
-            })
-            .from(".text-reveal", {
-                y: 150,
+
+            tl.from(".gs-y-reveal", {
+                y: 100,
+                opacity: 0,
                 duration: 1.2,
                 stagger: 0.2,
-                ease: "expo.out"
-            }, "-=0.5");
+                ease: "power4.out"
+            });
 
-            initMatrixBackground();
+            // Scroll Reveal Animations
+            const revealElements = document.querySelectorAll(".gs-reveal");
+            revealElements.forEach((el) => {
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                    },
+                    y: 80,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power3.out"
+                });
+            });
+
+            // Parallax effect for portfolio images
+            gsap.utils.toArray('.portfolio-img').forEach(img => {
+                gsap.to(img, {
+                    yPercent: 15,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: img,
+                        scrub: true
+                    }
+                });
+            });
         };
 
-        // 2. Custom Cursor
-        const cursor = document.querySelector("#cursor");
-        window.addEventListener("mousemove", (e) => {
-            gsap.to(cursor, {
-                x: e.clientX,
-                y: e.clientY,
-                duration: 0.1
-            });
-        });
-
-        // 3. Three.js Matrix-like Background
-        function initMatrixBackground() {
-            const container = document.getElementById('canvas-container');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-
-            const geometry = new THREE.BoxGeometry(1, 1, 1);
-            const material = new THREE.MeshBasicMaterial({ color: 0x00B67A, wireframe: true });
-            const cubes = [];
-
-            for(let i=0; i<100; i++) {
-                const cube = new THREE.Mesh(geometry, material);
-                cube.position.x = (Math.random() - 0.5) * 40;
-                cube.position.y = (Math.random() - 0.5) * 40;
-                cube.position.z = (Math.random() - 0.5) * 40;
-                cube.rotation.x = Math.random() * Math.PI;
-                scene.add(cube);
-                cubes.push(cube);
-            }
-
-            camera.position.z = 20;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                cubes.forEach(c => {
-                    c.rotation.x += 0.005;
-                    c.rotation.y += 0.005;
-                    c.position.y -= 0.01;
-                    if(c.position.y < -20) c.position.y = 20;
+        // Smooth Scroll Placeholder (Simplified)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
-                renderer.render(scene, camera);
-            }
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
             });
-        }
-
-        // 4. Horizontal Scroll
-        gsap.to(".horizontal-container", {
-            xPercent: -66,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".horizontal-scroll-section",
-                pin: true,
-                scrub: 1,
-                end: () => "+=" + document.querySelector(".horizontal-container").offsetWidth
-            }
-        });
-
-        // 5. Card Animations
-        gsap.from(".bento-card", {
-            scrollTrigger: {
-                trigger: ".grid",
-                start: "top 80%"
-            },
-            y: 100,
-            opacity: 0,
-            stagger: 0.1,
-            duration: 1.2,
-            ease: "power4.out"
         });
     </script>
 </body>
