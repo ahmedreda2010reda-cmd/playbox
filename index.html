@@ -47,7 +47,42 @@
             color: #ffffff;
             overflow-x: hidden;
             font-family: 'Almarai', sans-serif;
-            cursor: none; /* لإخفاء الماوس الأصلي واستخدام المتبع المخصص */
+            cursor: none;
+        }
+
+        /* --- Laser Loading Screen --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .laser-d {
+            font-size: 120px;
+            font-weight: 900;
+            font-family: 'Cairo', sans-serif;
+            position: relative;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 92, 0, 0.3);
+        }
+        .laser-d::after {
+            content: "D";
+            position: absolute;
+            left: 0; top: 0;
+            width: 0;
+            color: var(--primary);
+            overflow: hidden;
+            border-right: 4px solid var(--primary);
+            animation: laser-draw 2s linear infinite;
+            filter: drop-shadow(0 0 15px var(--primary));
+        }
+        @keyframes laser-draw {
+            0% { width: 0; }
+            50% { width: 100%; }
+            100% { width: 0; }
         }
 
         /* --- خلفية حية ومتحركة --- */
@@ -91,12 +126,12 @@
         .cursor-dot {
             width: 8px; height: 8px; background: var(--primary);
             position: fixed; top: 0; left: 0; border-radius: 50%;
-            z-index: 9999; pointer-events: none;
+            z-index: 10001; pointer-events: none;
         }
         .cursor-outline {
             width: 40px; height: 40px; border: 2px solid var(--primary);
             position: fixed; top: 0; left: 0; border-radius: 50%;
-            z-index: 9998; pointer-events: none; transition: transform 0.1s ease;
+            z-index: 10000; pointer-events: none; transition: transform 0.1s ease;
         }
 
         /* --- أزرار إبداعية حية --- */
@@ -154,9 +189,23 @@
             background: rgba(5, 5, 5, 0.7);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
     </style>
 </head>
 <body class="antialiased">
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="laser-d">D</div>
+    </div>
 
     <!-- Custom Cursor -->
     <div class="cursor-dot" id="cursor-dot"></div>
@@ -177,14 +226,14 @@
                 <a href="#about" class="hover:text-primary transition-all">عن الوكالة</a>
                 <a href="#services" class="hover:text-primary transition-all">خدماتنا</a>
                 <a href="#portfolio" class="hover:text-primary transition-all">معرض الأعمال</a>
-                <a href="#contact" class="hover:text-primary transition-all text-primary">ابدأ الآن</a>
+                <a href="#consultation" class="hover:text-primary transition-all text-primary">استشارة مجانية</a>
             </div>
-            <div class="md:hidden text-2xl"><i class="fas fa-bars"></i></div>
+            <div class="md:hidden text-2xl cursor-pointer"><i class="fas fa-bars"></i></div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center px-6">
+    <section class="relative min-h-screen flex items-center px-6 pt-20">
         <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-16 items-center">
             
             <div class="hero-text z-10">
@@ -201,20 +250,18 @@
                     في ديلوني، لا نصنع فقط تصاميم، بل نبني هويات تجارية تسيطر على الأسواق. نحن ندمج الفن بالتكنولوجيا لنمنح عملك القوة التي يستحقها.
                 </p>
                 <div class="gs-y-reveal flex gap-6">
-                    <a href="#contact" class="btn-creative">
-                        استشارة مجانية <i class="fas fa-arrow-left"></i>
+                    <a href="#consultation" class="btn-creative">
+                        ابدأ رحلة نجاحك <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
             </div>
 
             <div class="relative hidden md:block gs-y-reveal">
-                <!-- Interactive Image Card -->
                 <div class="relative group">
                     <div class="absolute -inset-4 bg-gradient-to-r from-primary to-orange-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                     <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000" 
                          alt="Creative Work" 
                          class="relative rounded-2xl grayscale hover:grayscale-0 transition-all duration-1000 object-cover shadow-2xl border border-white/10">
-                    <!-- Stats badge -->
                     <div class="absolute -bottom-10 -right-10 bg-black/80 backdrop-blur-xl p-8 rounded-3xl border border-primary/30 shadow-2xl">
                         <div class="text-4xl font-black text-primary">+150</div>
                         <div class="text-gray-400 text-sm">مشروع ناجح عالمياً</div>
@@ -224,145 +271,145 @@
         </div>
     </section>
 
-    <!-- Moving Marquee -->
-    <div class="py-12 bg-white/5 border-y border-white/5 marquee-container overflow-hidden">
-        <div class="flex whitespace-nowrap animate-[marquee_30s_linear_infinite] gap-16 items-center">
-            <span class="text-4xl font-black text-white/10 uppercase font-heading italic">STRATEGY</span>
-            <span class="text-4xl font-black text-primary uppercase font-heading">BRANDING</span>
-            <span class="text-4xl font-black text-white/10 uppercase font-heading italic">DEVELOPMENT</span>
-            <span class="text-4xl font-black text-white uppercase font-heading">MARKETING</span>
-            <span class="text-4xl font-black text-white/10 uppercase font-heading italic">UX/UI DESIGN</span>
-            <span class="text-4xl font-black text-primary uppercase font-heading italic">STRATEGY</span>
-            <span class="text-4xl font-black text-white uppercase font-heading">SEO EXPERT</span>
+    <!-- Stats Counter Section -->
+    <section class="py-20 px-6 bg-white/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="gs-reveal">
+                <div class="text-5xl font-black text-primary mb-2" data-target="98">0</div>
+                <div class="text-gray-400 font-bold uppercase text-xs tracking-widest">عملاء سعداء %</div>
+            </div>
+            <div class="gs-reveal">
+                <div class="text-5xl font-black text-primary mb-2" data-target="240">0</div>
+                <div class="text-gray-400 font-bold uppercase text-xs tracking-widest">مشروع مكتمل</div>
+            </div>
+            <div class="gs-reveal">
+                <div class="text-5xl font-black text-primary mb-2" data-target="12">0</div>
+                <div class="text-gray-400 font-bold uppercase text-xs tracking-widest">سنوات خبرة</div>
+            </div>
+            <div class="gs-reveal">
+                <div class="text-5xl font-black text-primary mb-2" data-target="45">0</div>
+                <div class="text-gray-400 font-bold uppercase text-xs tracking-widest">خبير مبدع</div>
+            </div>
         </div>
-    </div>
+    </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-32 px-6">
+    <section id="services" class="py-32 px-6 relative">
         <div class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
                 <div class="max-w-2xl">
-                    <h2 class="text-5xl md:text-7xl font-black mb-8 font-heading">حلول <span class="text-primary italic">ذكية</span></h2>
-                    <p class="text-gray-400 text-xl leading-relaxed">حلولنا ليست مجرد خدمات، بل هي استراتيجيات متكاملة مصممة بعناية لتناسب حجم وطموح شركتك.</p>
+                    <h2 class="text-5xl md:text-7xl font-black mb-8 font-heading gs-reveal">ترسانة <span class="text-primary italic">خدماتنا</span></h2>
+                    <p class="text-gray-400 text-xl leading-relaxed gs-reveal">نقدم حلولاً تسويقية ورقمية متكاملة تبدأ من الفكرة وتصل بك إلى القمة، حيث تلتقي البرمجة المتقنة بالتسويق الذكي.</p>
                 </div>
                 <div class="hidden md:block">
-                    <div class="text-[120px] font-black text-white/5 leading-none">SERVICE</div>
+                    <div class="text-[120px] font-black text-white/5 leading-none">EXPERT</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <div class="service-card p-12 gs-reveal">
-                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10">
-                        <i class="fas fa-fingerprint"></i>
-                    </div>
-                    <h3 class="text-3xl font-black mb-6 font-heading">الهوية البصرية</h3>
-                    <p class="text-gray-500 mb-10 text-lg">بناء شخصية فريدة لعلامتك التجارية تشمل الشعار، الألوان، والخطوط التي تميزك عن الجميع.</p>
-                    <ul class="text-sm text-gray-400 space-y-3 mb-10">
-                        <li><i class="fas fa-check text-primary ml-2"></i> تصميم شعارات مبتكرة</li>
-                        <li><i class="fas fa-check text-primary ml-2"></i> أدلة استخدام الهوية</li>
-                    </ul>
-                    <a href="#" class="text-primary font-bold flex items-center gap-3 group">
-                        اطلب الخدمة <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-all"></i>
-                    </a>
+                <!-- Service Items -->
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-rocket"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">التسويق المتكامل</h3>
+                    <p class="text-gray-500 mb-8">خطط استراتيجية لغزو السوق وزيادة المبيعات عبر قنوات متعددة.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="service-card p-12 gs-reveal">
-                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="text-3xl font-black mb-6 font-heading">تطوير المواقع</h3>
-                    <p class="text-gray-500 mb-10 text-lg">تحويل رؤيتك إلى واقع رقمي سريع، متجاوب مع كافة الشاشات، ومحسن لمحركات البحث.</p>
-                    <ul class="text-sm text-gray-400 space-y-3 mb-10">
-                        <li><i class="fas fa-check text-primary ml-2"></i> متاجر إلكترونية</li>
-                        <li><i class="fas fa-check text-primary ml-2"></i> مواقع تعريفية فاخرة</li>
-                    </ul>
-                    <a href="#" class="text-primary font-bold flex items-center gap-3 group">
-                        اطلب الخدمة <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-all"></i>
-                    </a>
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">البرمجة والتطوير</h3>
+                    <p class="text-gray-500 mb-8">بناء أنظمة برمجية ومواقع وتطبيقات قوية تتحمل ضغط الزيارات العالي.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="service-card p-12 gs-reveal">
-                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <h3 class="text-3xl font-black mb-6 font-heading">التسويق الرقمي</h3>
-                    <p class="text-gray-500 mb-10 text-lg">إدارة حملات إعلانية ذكية على كافة المنصات تضمن لك الوصول لجمهورك المستهدف بدقة.</p>
-                    <ul class="text-sm text-gray-400 space-y-3 mb-10">
-                        <li><i class="fas fa-check text-primary ml-2"></i> إعلانات فيسبوك وجوجل</li>
-                        <li><i class="fas fa-check text-primary ml-2"></i> إدارة حسابات التواصل</li>
-                    </ul>
-                    <a href="#" class="text-primary font-bold flex items-center gap-3 group">
-                        اطلب الخدمة <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-all"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Portfolio -->
-    <section id="portfolio" class="py-32 px-6 bg-[#080808]">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-black mb-20 font-heading text-center">أعمال <span class="text-outline uppercase">Masterpieces</span></h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <!-- Item 1 -->
-                <div class="gs-reveal group">
-                    <div class="relative overflow-hidden rounded-[40px] aspect-video">
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200" 
-                             class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
-                            <button class="px-8 py-3 bg-white text-black font-black rounded-full">عرض المشروع</button>
-                        </div>
-                    </div>
-                    <div class="mt-8 flex justify-between items-end px-4">
-                        <div>
-                            <span class="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">Branding & UI</span>
-                            <h3 class="text-3xl font-black font-heading">ساعة أورا الفاخرة</h3>
-                        </div>
-                        <div class="text-white/20 text-4xl italic font-black">01</div>
-                    </div>
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-users-cog"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">إدارة السوشيال ميديا</h3>
+                    <p class="text-gray-500 mb-8">بناء مجتمعات رقمية حيوية حول علامتك التجارية لزيادة الولاء.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
                 </div>
 
-                <!-- Item 2 -->
-                <div class="gs-reveal group mt-12 md:mt-24">
-                    <div class="relative overflow-hidden rounded-[40px] aspect-video">
-                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1200" 
-                             class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
-                            <button class="px-8 py-3 bg-white text-black font-black rounded-full">عرض المشروع</button>
-                        </div>
-                    </div>
-                    <div class="mt-8 flex justify-between items-end px-4">
-                        <div>
-                            <span class="text-primary font-bold text-sm tracking-widest uppercase mb-2 block">App Development</span>
-                            <h3 class="text-3xl font-black font-heading">منصة سايبر التعليمية</h3>
-                        </div>
-                        <div class="text-white/20 text-4xl italic font-black">02</div>
-                    </div>
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-video"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">الإنتاج والمونتاج</h3>
+                    <p class="text-gray-500 mb-8">صناعة محتوى مرئي يخطف الأنفاس ويحكي قصة نجاحك باحترافية.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-pen-nib"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">كتابة المحتوى</h3>
+                    <p class="text-gray-400 mb-8">نكتب الكلمات التي تبيع، وتؤثر، وتجعل العميل يثق بك من القراءة الأولى.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-ad"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">إدارة الإعلانات الممولة</h3>
+                    <p class="text-gray-500 mb-8">تحسين معدل التحويل (ROI) لضمان عدم ضياع ميزانيتك الإعلانية.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fab fa-google"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">إعلانات جوجل SEM</h3>
+                    <p class="text-gray-500 mb-8">الظهور في النتائج الأولى لعمليات البحث المستهدفة بدقة متناهية.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-globe"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">إنشاء المواقع</h3>
+                    <p class="text-gray-500 mb-8">مواقع تعريفية ومتاجر إلكترونية عصرية متوافقة مع جميع الأجهزة.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-search-dollar"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">تحسين محركات البحث SEO</h3>
+                    <p class="text-gray-500 mb-8">السيطرة على كلمات البحث لضمان تدفق عملاء دائم ومجاني.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-paint-brush"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">تصميم جرافيك</h3>
+                    <p class="text-gray-500 mb-8">إبداع بصري يترجم قيم شركتك إلى صور وتصاميم مبهرة.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
+                </div>
+
+                <div class="service-card p-10 gs-reveal">
+                    <div class="text-primary text-4xl mb-6"><i class="fas fa-layer-group"></i></div>
+                    <h3 class="text-2xl font-black mb-4 font-heading">تصاميم متنوعة</h3>
+                    <p class="text-gray-500 mb-8">كل ما تحتاجه من مطبوعات، هويات، وبروفايلات شركات في مكان واحد.</p>
+                    <button class="w-full py-3 border border-primary/30 rounded-xl hover:bg-primary transition-all font-bold">استكشف المزيد</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Interactive CTA -->
-    <section id="contact" class="py-40 px-6 text-center relative overflow-hidden">
-        <div class="max-w-4xl mx-auto z-10 relative">
-            <h2 class="text-6xl md:text-9xl font-black mb-12 font-heading leading-tight gs-reveal">
-                لنبني <span class="text-primary">إمبراطوريتك</span> <br> اليوم؟
-            </h2>
-            <div class="gs-reveal">
-                <a href="mailto:hello@deloni.agency" class="text-3xl md:text-5xl font-black text-white hover:text-primary transition-all border-b-4 border-primary/30 hover:border-primary pb-4">
-                    Let's Talk: hello@deloni.agency
-                </a>
-            </div>
+    <!-- Moving Marquee -->
+    <div class="py-12 bg-white/5 border-y border-white/5 marquee-container overflow-hidden">
+        <div class="animate-marquee gap-16 items-center">
+            <span class="text-4xl font-black text-white/10 uppercase font-heading italic px-8">STRATEGY</span>
+            <span class="text-4xl font-black text-primary uppercase font-heading px-8">BRANDING</span>
+            <span class="text-4xl font-black text-white/10 uppercase font-heading italic px-8">DEVELOPMENT</span>
+            <span class="text-4xl font-black text-white uppercase font-heading px-8">MARKETING</span>
+            <span class="text-4xl font-black text-white/10 uppercase font-heading italic px-8">UX/UI DESIGN</span>
+            <span class="text-4xl font-black text-primary uppercase font-heading italic px-8">CONTENT</span>
         </div>
-        <!-- Decorative Text -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black text-white/[0.02] whitespace-nowrap pointer-events-none select-none">
-            GET IN TOUCH
+    </div>
+
+    <!-- Consultation Section (WhatsApp Integration) -->
+    <section id="consultation" class="py-32 px-6 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto bg-gradient-to-br from-primary/20 to-transparent p-16 rounded-[50px] border border-primary/20 text-center relative z-10 gs-reveal">
+            <h2 class="text-4xl md:text-6xl font-black mb-8 font-heading">هل أنت مستعد <br><span class="text-primary">لنقلة نوعية؟</span></h2>
+            <p class="text-xl text-gray-300 mb-12">احجز استشارتك المجانية الآن مع خبرائنا عبر واتساب لنرسم معاً خريطة طريق نجاحك.</p>
+            <a href="https://wa.me/201014811094?text=أريد حجز استشارة مع ديلوني" target="_blank" class="btn-creative !bg-[#25D366] !shadow-green-900/40">
+                 تحدث معنا واتساب <i class="fab fa-whatsapp text-2xl"></i>
+            </a>
         </div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[120px] rounded-full"></div>
     </section>
 
     <!-- Footer -->
@@ -381,6 +428,19 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
+        // --- Loader Logic ---
+        window.addEventListener('load', () => {
+            gsap.to("#loader", {
+                opacity: 0,
+                duration: 1,
+                delay: 2,
+                onComplete: () => {
+                    document.getElementById("loader").style.display = "none";
+                    startAnimations();
+                }
+            });
+        });
+
         // --- Custom Cursor Animation ---
         const cursorDot = document.getElementById("cursor-dot");
         const cursorOutline = document.getElementById("cursor-outline");
@@ -392,7 +452,6 @@
             cursorDot.style.left = `${posX}px`;
             cursorDot.style.top = `${posY}px`;
 
-            // السحب الناعم للمحدد الخارجي
             gsap.to(cursorOutline, {
                 x: posX - 20,
                 y: posY - 20,
@@ -400,7 +459,7 @@
             });
         });
 
-        // تكبير الماوس عند الوقوف على الروابط
+        // Hover Effect for Cursor
         document.querySelectorAll('a, button, .service-card').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursorOutline.style.transform = 'scale(2)';
@@ -412,11 +471,9 @@
             });
         });
 
-        // --- GSAP Scroll Animations ---
-        window.onload = () => {
-            const tl = gsap.timeline();
-
-            tl.from(".gs-y-reveal", {
+        function startAnimations() {
+            // Hero Reveal
+            gsap.from(".gs-y-reveal", {
                 y: 100,
                 opacity: 0,
                 duration: 1.5,
@@ -424,12 +481,12 @@
                 ease: "power4.out"
             });
 
-            // Reveal sections on scroll
+            // Section Reveals
             document.querySelectorAll(".gs-reveal").forEach((el) => {
                 gsap.from(el, {
                     scrollTrigger: {
                         trigger: el,
-                        start: "top 85%",
+                        start: "top 90%",
                     },
                     y: 60,
                     opacity: 0,
@@ -438,17 +495,32 @@
                 });
             });
 
-            // Parallax movement for background blobs
-            const blob1 = document.getElementById('blob1');
-            const blob2 = document.getElementById('blob2');
-            window.addEventListener('mousemove', (e) => {
-                const moveX = (e.clientX - window.innerWidth / 2) * 0.05;
-                const moveY = (e.clientY - window.innerHeight / 2) * 0.05;
-                
-                gsap.to(blob1, { x: moveX, y: moveY, duration: 2 });
-                gsap.to(blob2, { x: -moveX, y: -moveY, duration: 2 });
+            // Counters Animation
+            document.querySelectorAll('[data-target]').forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                gsap.to(counter, {
+                    scrollTrigger: {
+                        trigger: counter,
+                        start: "top 95%",
+                    },
+                    innerText: target,
+                    duration: 2.5,
+                    snap: { innerText: 1 },
+                    ease: "power1.inOut"
+                });
             });
-        };
+        }
+
+        // Parallax movement for background blobs
+        const blob1 = document.getElementById('blob1');
+        const blob2 = document.getElementById('blob2');
+        window.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.05;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.05;
+            
+            gsap.to(blob1, { x: moveX, y: moveY, duration: 2 });
+            gsap.to(blob2, { x: -moveX, y: -moveY, duration: 2 });
+        });
     </script>
 </body>
 </html>
