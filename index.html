@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DELONI | وكالة الإبداع الرقمي</title>
+    <title>DELONI | وكالة الإبداع الرقمي الفاخرة</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,10 +12,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#FF5C00', // برتقالي ساطع احترافي
-                        secondary: '#FF8A4D',
-                        accent: '#1A1A1A',
-                        bglight: '#FAF9F6',
+                        primary: '#FF5C00', 
+                        bgdark: '#050505',
+                        surface: '#0f0f0f',
                     },
                     fontFamily: {
                         sans: ['Noto Sans Arabic', 'sans-serif'],
@@ -26,10 +25,8 @@
         }
     </script>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;700;900&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Icons -->
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- GSAP & Plugins -->
@@ -37,358 +34,437 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        :root {
-            --primary: #FF5C00;
-        }
+        :root { --primary: #FF5C00; }
+        
+        * { cursor: none; } /* مخصص للماوس التفاعلي */
 
         body {
-            background-color: #0c0c0c;
+            background-color: #050505;
             color: #ffffff;
             overflow-x: hidden;
             font-family: 'Noto Sans Arabic', sans-serif;
         }
 
-        /* Animated Gradient Background */
-        .bg-mesh {
+        /* --- Custom Cursor --- */
+        #custom-cursor {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0c0c0c 100%);
-        }
-        .bg-blob {
-            position: absolute;
-            width: 500px; height: 500px;
-            background: var(--primary);
-            filter: blur(150px);
-            opacity: 0.15;
-            border-radius: 50%;
-            z-index: -1;
-        }
-
-        /* Creative Buttons */
-        .btn-creative {
-            background: var(--primary);
-            color: white;
-            padding: 18px 45px;
-            border-radius: 12px;
-            font-weight: 800;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-        }
-        .btn-creative::before {
-            content: ''; position: absolute; top: 0; right: 0; width: 0%; height: 100%;
-            background: white; transition: all 0.5s; z-index: -1;
-        }
-        .btn-creative:hover::before { width: 100%; left: 0; }
-        .btn-creative:hover { color: var(--primary); transform: scale(1.05); }
-
-        /* Card Hover Animations */
-        .service-card {
-            background: #151515;
-            border: 1px solid rgba(255, 92, 0, 0.1);
-            transition: all 0.4s ease;
-        }
-        .service-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 92, 0, 0.1);
-        }
-
-        /* Portfolio Reveal */
-        .portfolio-box {
-            overflow: hidden;
-            position: relative;
-            border-radius: 20px;
-        }
-        .portfolio-img {
-            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .portfolio-box:hover .portfolio-img {
-            transform: scale(1.1) rotate(2deg);
-        }
-
-        /* Custom Cursor Placeholder for Animation */
-        .cursor-follower {
-            position: fixed;
-            width: 20px; height: 20px;
+            width: 10px; height: 10px;
             background: var(--primary);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.5;
-            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+        #cursor-follower {
+            position: fixed;
+            width: 40px; height: 40px;
+            border: 2px solid rgba(255, 92, 0, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .text-outline {
+        /* --- Laser D Loader --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .laser-d {
+            width: 120px;
+            height: 120px;
+            stroke: var(--primary);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        /* --- Background Animation --- */
+        .bg-gradient-noise {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #050505 100%);
+            z-index: -2;
+        }
+        .bg-blob {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            filter: blur(140px);
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- Typography & Visuals --- */
+        .text-outline-premium {
             color: transparent;
-            -webkit-text-stroke: 1px rgba(255, 92, 0, 0.4);
+            -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.15);
+            transition: all 0.5s;
+        }
+        .text-outline-premium:hover {
+            -webkit-text-stroke: 1.5px var(--primary);
+        }
+
+        .hero-title {
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 900;
+            line-height: 0.9;
+        }
+
+        /* --- Hover Interaction Cards --- */
+        .service-card-new {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card-new:hover {
+            background: rgba(255, 92, 0, 0.05);
+            border-color: rgba(255, 92, 0, 0.3);
+            transform: translateY(-10px) scale(1.02);
+        }
+        .service-card-new::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--x) var(--y), rgba(255,92,0,0.15) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .service-card-new:hover::after { opacity: 1; }
+
+        /* --- Floating UI elements --- */
+        .float-badge {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Background Elements -->
-    <div class="bg-mesh"></div>
-    <div class="bg-blob" id="blob1" style="top: -10%; left: -10%;"></div>
-    <div class="bg-blob" id="blob2" style="bottom: 10%; right: 10%;"></div>
+    <!-- Cursor Elements -->
+    <div id="custom-cursor"></div>
+    <div id="cursor-follower"></div>
+
+    <!-- Laser D Loader -->
+    <div id="loader">
+        <svg class="laser-d" viewBox="0 0 100 100">
+            <path id="d-path" d="M30,20 L30,80 C30,80 75,80 75,50 C75,20 30,20 30,20" />
+        </svg>
+    </div>
+
+    <!-- Background -->
+    <div class="bg-gradient-noise"></div>
+    <div class="bg-blob" id="blob1"></div>
+    <div class="bg-blob" id="blob2"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full p-8 z-50 mix-blend-difference" id="navbar">
+    <nav class="fixed top-0 w-full p-6 md:p-10 z-[100] transition-all duration-500" id="main-nav">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-3xl font-black font-heading tracking-tighter">DELONI<span class="text-primary">.</span></div>
-            <div class="hidden md:flex gap-12 font-bold text-sm tracking-widest uppercase">
-                <a href="#about" class="hover:text-primary transition">القصة</a>
-                <a href="#services" class="hover:text-primary transition">الخدمات</a>
-                <a href="#portfolio" class="hover:text-primary transition">الأعمال</a>
-                <a href="#contact" class="hover:text-primary transition">تواصل</a>
+            <div class="hidden md:flex gap-10 font-bold text-xs tracking-[0.2em] uppercase">
+                <a href="#services" class="hover:text-primary transition-all">الخدمات</a>
+                <a href="#stats" class="hover:text-primary transition-all">الأرقام</a>
+                <a href="#contact" class="hover:text-primary transition-all">تواصل معنا</a>
             </div>
+            <a href="#contact" class="bg-white text-black px-6 py-2 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-primary hover:text-white transition-all">
+                ابدأ مشروعك
+            </a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center px-6 overflow-hidden">
-        <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
-            
-            <div class="hero-text z-10">
-                <div class="overflow-hidden mb-4">
-                    <span class="block text-primary font-black tracking-widest uppercase text-sm gs-y-reveal">استديو إبداعي متكامل</span>
+    <section class="relative min-h-screen flex items-center px-6 pt-20">
+        <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-20 items-center">
+            <div class="hero-content">
+                <div class="inline-flex items-center gap-3 px-4 py-2 border border-white/10 rounded-full mb-8 gs-reveal-up">
+                    <span class="w-2 h-2 bg-primary rounded-full animate-ping"></span>
+                    <span class="text-[10px] uppercase font-bold tracking-[0.3em]">وكالة المستقبل الرقمي</span>
                 </div>
-                <h1 class="text-6xl md:text-8xl font-black leading-none mb-8 gs-y-reveal">
-                    نفكر <span class="text-primary italic">بجرأة</span><br>
-                    ننفذ <span class="text-outline">بذكاء</span>
+                
+                <h1 class="hero-title text-6xl md:text-[110px] mb-8 gs-reveal-up">
+                    نبدع <span class="text-primary italic">بفن</span><br>
+                    نحكم <span class="text-outline-premium">بالكود</span>
                 </h1>
-                <p class="text-lg text-gray-400 max-w-lg mb-10 leading-relaxed gs-y-reveal">
-                    نحن وكالة ديلوني، نحول الأفكار المعقدة إلى تجارب رقمية بسيطة ومؤثرة. متخصصون في بناء البرندات التي لا يمكن تجاهلها.
+                
+                <p class="text-xl text-gray-400 max-w-xl mb-12 leading-relaxed font-light gs-reveal-up">
+                    في ديلوني، لا نصنع فقط مواقع أو حملات، نحن نشكل <span class="text-white font-bold">مستقبل علامتك التجارية</span>. تصاميمنا تتحدث، وأكوادنا تبني إمبراطوريات رقمية.
                 </p>
-                <div class="gs-y-reveal">
-                    <a href="#contact" class="btn-creative">
-                        دعنا نبدع سوياً <i class="fas fa-bolt"></i>
+                
+                <div class="flex flex-wrap gap-6 gs-reveal-up">
+                    <a href="#contact" class="group relative px-10 py-5 bg-primary rounded-2xl overflow-hidden transition-all">
+                        <span class="relative z-10 font-black text-lg flex items-center gap-3 text-white">
+                            استشارة مجانية <i class="fas fa-arrow-left group-hover:-translate-x-2 transition-transform"></i>
+                        </span>
+                        <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                        <style>.group:hover span { color: black; }</style>
                     </a>
                 </div>
             </div>
 
-            <div class="relative hidden md:block">
-                <!-- Abstract Animated Shape -->
-                <div class="relative w-full aspect-square flex items-center justify-center">
-                    <div class="absolute w-4/5 h-4/5 border-2 border-primary/20 rounded-full animate-pulse"></div>
-                    <div class="absolute w-full h-full border border-primary/10 rounded-[40%] animate-[spin_20s_linear_infinite]"></div>
-                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000&auto=format&fit=crop" 
-                         alt="Digital Art" 
-                         class="w-4/5 h-4/5 object-cover rounded-3xl grayscale hover:grayscale-0 transition-all duration-700 shadow-[0_0_80px_rgba(255,92,0,0.2)]">
+            <!-- Visual Side -->
+            <div class="relative hidden md:flex justify-center items-center gs-reveal-scale">
+                <div class="absolute w-[120%] h-[120%] border border-white/5 rounded-full rotate-45"></div>
+                <div class="relative z-10 w-full aspect-square rounded-[60px] overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000&auto=format&fit=crop" 
+                         class="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-10 right-10 left-10">
+                        <div class="text-4xl font-black mb-2">إبداع بلا حدود</div>
+                        <div class="text-primary font-bold">DELONI PREMIUM STUDIO</div>
+                    </div>
+                </div>
+                <!-- Floating Card -->
+                <div class="absolute -top-10 -right-10 bg-surface border border-white/10 p-6 rounded-3xl float-badge backdrop-blur-xl">
+                    <div class="text-primary text-3xl font-black">99%</div>
+                    <div class="text-[10px] text-gray-400 font-bold uppercase">رضا العملاء</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Partners Marquee -->
-    <div class="py-10 bg-primary overflow-hidden">
-        <div class="flex whitespace-nowrap animate-[marquee_20s_linear_infinite] gap-20 items-center">
-            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">BRANDING</span>
-            <span class="text-3xl font-black text-black uppercase tracking-tighter">WEB DESIGN</span>
-            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">MARKETING</span>
-            <span class="text-3xl font-black text-black uppercase tracking-tighter">STRATEGY</span>
-            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">SEO</span>
-            <span class="text-3xl font-black text-black uppercase tracking-tighter">SOCIAL MEDIA</span>
-            <!-- Repeat for seamless loop -->
-            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">BRANDING</span>
-            <span class="text-3xl font-black text-black uppercase tracking-tighter">WEB DESIGN</span>
-            <span class="text-3xl font-black text-black/20 uppercase tracking-tighter">MARKETING</span>
+    <!-- Stats Section -->
+    <section id="stats" class="py-32 border-y border-white/5 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-16 relative z-10">
+            <div class="text-center group">
+                <div class="text-7xl font-black text-white mb-4 group-hover:text-primary transition-colors" data-target="120">0</div>
+                <div class="text-[10px] font-bold text-gray-500 tracking-[0.4em] uppercase">مشروع عالمي</div>
+            </div>
+            <div class="text-center group">
+                <div class="text-7xl font-black text-white mb-4 group-hover:text-primary transition-colors" data-target="50">0</div>
+                <div class="text-[10px] font-bold text-gray-500 tracking-[0.4em] uppercase">شريك نجاح</div>
+            </div>
+            <div class="text-center group">
+                <div class="text-7xl font-black text-white mb-4 group-hover:text-primary transition-colors" data-target="15">0</div>
+                <div class="text-[10px] font-bold text-gray-500 tracking-[0.4em] uppercase">خبير مبدع</div>
+            </div>
+            <div class="text-center group">
+                <div class="text-7xl font-black text-white mb-4 group-hover:text-primary transition-colors" data-target="8">0</div>
+                <div class="text-[10px] font-bold text-gray-500 tracking-[0.4em] uppercase">سنوات تميز</div>
+            </div>
         </div>
-    </div>
+    </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-32 px-6">
+    <section id="services" class="py-40 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-20 mb-24 items-end">
-                <div>
-                    <h2 class="text-5xl md:text-7xl font-black mb-8">ماذا <span class="text-primary">نقدم؟</span></h2>
-                    <p class="text-gray-500 text-xl">خدماتنا مصممة للشركات التي لا تقبل بالحلول التقليدية وترغب في التميز الحقيقي.</p>
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
+                <div class="gs-reveal-up">
+                    <h2 class="text-5xl md:text-8xl font-black mb-8">محركات <br><span class="text-primary">النمو</span></h2>
+                    <p class="text-gray-500 text-xl max-w-md">نحن لا نقدم خدمات، نحن نبني أنظمة تدر عليك الأرباح وتخطف الأنظار.</p>
                 </div>
-                <div class="flex justify-end">
-                    <div class="text-right">
-                        <div class="text-8xl font-black text-primary/10">04</div>
-                        <div class="text-primary font-bold">ركائز أساسية للنمو</div>
-                    </div>
+                <div class="text-right gs-reveal-up">
+                    <div class="text-[150px] font-black leading-none opacity-5 select-none">DELONI</div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Card 1 -->
-                <div class="service-card p-10 rounded-3xl gs-reveal">
-                    <div class="text-primary text-4xl mb-8"><i class="fas fa-fingerprint"></i></div>
-                    <h3 class="text-2xl font-black mb-4">الهوية البصرية</h3>
-                    <p class="text-gray-500 mb-8">نصنع وجهاً لعلامتك التجارية يعبر عن قيمك ويجذب جمهورك المستهدف من النظرة الأولى.</p>
-                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
-                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
-                    </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service Item 1 -->
+                <div class="service-card-new p-12 rounded-[40px] gs-reveal-up" onmousemove="updateMousePos(event, this)">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-3xl font-black mb-6">التسويق الهجومي</h3>
+                    <p class="text-gray-400 leading-relaxed mb-8">حملات تسويقية مصممة للاستحواذ على السوق وتحقيق أرقام خيالية باستخدام الذكاء الاصطناعي.</p>
+                    <ul class="text-sm text-gray-500 space-y-3 font-bold">
+                        <li><i class="fas fa-check text-primary ml-2"></i> إعلانات جوجل المتقدمة</li>
+                        <li><i class="fas fa-check text-primary ml-2"></i> استهداف دقيق للمنافسين</li>
+                    </ul>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="service-card p-10 rounded-3xl gs-reveal">
-                    <div class="text-primary text-4xl mb-8"><i class="fas fa-code"></i></div>
-                    <h3 class="text-2xl font-black mb-4">تطوير المواقع</h3>
-                    <p class="text-gray-500 mb-8">مواقع سريعة، متجاوبة، ومصممة لتجربة مستخدم تجعل العميل يقع في حب علامتك.</p>
-                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
-                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
-                    </a>
+                <!-- Service Item 2 -->
+                <div class="service-card-new p-12 rounded-[40px] gs-reveal-up" onmousemove="updateMousePos(event, this)">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="text-3xl font-black mb-6">البرمجة الفاخرة</h3>
+                    <p class="text-gray-400 leading-relaxed mb-8">نطور أنظمة ومواقع لا تنهار، سريعة كـ البرق، ومحمية بأحدث بروتوكولات الأمان العالمية.</p>
+                    <ul class="text-sm text-gray-500 space-y-3 font-bold">
+                        <li><i class="fas fa-check text-primary ml-2"></i> متاجر إلكترونية احترافية</li>
+                        <li><i class="fas fa-check text-primary ml-2"></i> تطبيقات ويب مخصصة</li>
+                    </ul>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="service-card p-10 rounded-3xl gs-reveal">
-                    <div class="text-primary text-4xl mb-8"><i class="fas fa-bullhorn"></i></div>
-                    <h3 class="text-2xl font-black mb-4">التسويق الرقمي</h3>
-                    <p class="text-gray-500 mb-8">حملات إعلانية ذكية تعتمد على البيانات وليس التخمين لضمان أفضل عائد.</p>
-                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
-                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
-                    </a>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="service-card p-10 rounded-3xl gs-reveal">
-                    <div class="text-primary text-4xl mb-8"><i class="fas fa-pencil-ruler"></i></div>
-                    <h3 class="text-2xl font-black mb-4">صناعة المحتوى</h3>
-                    <p class="text-gray-500 mb-8">نروي قصة علامتك التجارية من خلال محتوى بصري وكتابي يخلق تفاعلاً حقيقياً.</p>
-                    <a href="#" class="text-primary font-bold flex items-center gap-2 group">
-                        اكتشف المزيد <i class="fas fa-arrow-left group-hover:mr-2 transition-all"></i>
-                    </a>
+                <!-- Service Item 3 -->
+                <div class="service-card-new p-12 rounded-[40px] gs-reveal-up" onmousemove="updateMousePos(event, this)">
+                    <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary text-3xl mb-10">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="text-3xl font-black mb-6">الهوية الملكية</h3>
+                    <p class="text-gray-500 leading-relaxed mb-8">تصميم شعارات وبراندات تفرض احترامها في السوق وتخلق ارتباطاً عاطفياً مع عملائك.</p>
+                    <ul class="text-sm text-gray-500 space-y-3 font-bold">
+                        <li><i class="fas fa-check text-primary ml-2"></i> استراتيجية البراند</li>
+                        <li><i class="fas fa-check text-primary ml-2"></i> تجربة المستخدم UX/UI</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Portfolio (Modern Grid) -->
-    <section id="portfolio" class="py-32 px-6 bg-[#080808]">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl font-black mb-20 text-center">مشاريع <span class="text-outline">مختارة</span></h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <!-- Project 1 -->
-                <div class="gs-reveal group">
-                    <div class="portfolio-box aspect-video mb-6">
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop" class="portfolio-img w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
-                            <span class="text-black font-black text-2xl">مشاهدة المشروع</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="text-2xl font-black">ساعة "أورا" الذكية</h3>
-                            <p class="text-gray-500">تصميم منتج + هوية بصرية</p>
-                        </div>
-                        <div class="text-primary text-2xl"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="gs-reveal group mt-12 md:mt-24">
-                    <div class="portfolio-box aspect-video mb-6">
-                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1200&auto=format&fit=crop" class="portfolio-img w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
-                            <span class="text-black font-black text-2xl">مشاهدة المشروع</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="text-2xl font-black">منصة "سايبر" للتعليم</h3>
-                            <p class="text-gray-500">برمجة تطبيقات + واجهة مستخدم</p>
-                        </div>
-                        <div class="text-primary text-2xl"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
+    <!-- Final Call to Action -->
     <section id="contact" class="py-40 px-6 relative">
-        <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-6xl md:text-9xl font-black mb-12 gs-reveal">هل أنت <br><span class="text-primary">مستعد؟</span></h2>
-            <p class="text-2xl text-gray-400 mb-16 gs-reveal">لنصنع شيئاً عظيماً يغير قواعد اللعبة في مجالك.</p>
-            <div class="gs-reveal">
-                <a href="mailto:hello@deloni.agency" class="text-4xl md:text-6xl font-black border-b-4 border-primary hover:text-primary transition-all">
-                    hello@deloni.agency
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <h2 class="text-6xl md:text-[140px] font-black leading-none mb-20 gs-reveal-up">
+                دعنا نبهر <br><span class="text-outline-premium italic">العالم</span>
+            </h2>
+            <div class="gs-reveal-up">
+                <a href="https://wa.me/your-number" class="inline-block px-16 py-8 bg-primary rounded-full text-2xl font-black hover:scale-110 hover:shadow-[0_0_50px_rgba(255,92,0,0.4)] transition-all">
+                    تواصل مباشرة مع الخبراء <i class="fab fa-whatsapp mr-4"></i>
                 </a>
             </div>
+        </div>
+        <!-- Moving background text -->
+        <div class="absolute bottom-0 w-full overflow-hidden whitespace-nowrap opacity-5 pointer-events-none">
+            <div class="text-[20vw] font-black animate-marquee">DELONI DIGITAL AGENCY • DELONI DIGITAL AGENCY • </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-20 border-t border-white/5 px-6">
+    <footer class="py-20 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="text-3xl font-black font-heading">DELONI<span class="text-primary">.</span></div>
-            <div class="flex gap-8 text-gray-500 font-bold uppercase text-xs tracking-widest">
-                <a href="#" class="hover:text-primary transition">انستقرام</a>
-                <a href="#" class="hover:text-primary transition">لينكد إن</a>
-                <a href="#" class="hover:text-primary transition">تويتر</a>
+            <div class="text-3xl font-black">DELONI<span class="text-primary">.</span></div>
+            <div class="text-gray-500 text-sm font-bold uppercase tracking-widest">جميع الحقوق محفوظة © 2024</div>
+            <div class="flex gap-8">
+                <a href="#" class="text-xl hover:text-primary transition-all"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-xl hover:text-primary transition-all"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-xl hover:text-primary transition-all"><i class="fab fa-x-twitter"></i></a>
             </div>
-            <div class="text-gray-600 text-sm">© 2024 جميع الحقوق محفوظة لوكالة ديلوني</div>
         </div>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Custom Cursor Follower Animation
-        const blob1 = document.getElementById('blob1');
-        const blob2 = document.getElementById('blob2');
-
+        // --- Custom Cursor Logic ---
+        const cursor = document.getElementById('custom-cursor');
+        const follower = document.getElementById('cursor-follower');
+        
         window.addEventListener('mousemove', (e) => {
-            gsap.to(blob1, { x: e.clientX * 0.1, y: e.clientY * 0.1, duration: 1 });
-            gsap.to(blob2, { x: -e.clientX * 0.1, y: -e.clientY * 0.1, duration: 1 });
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
+            gsap.to(follower, { x: e.clientX - 15, y: e.clientY - 15, duration: 0.3 });
         });
 
-        // Intro Animations
-        window.onload = () => {
-            const tl = gsap.timeline();
+        // --- Card Hover Light Effect ---
+        function updateMousePos(e, el) {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            el.style.setProperty('--x', `${x}px`);
+            el.style.setProperty('--y', `${y}px`);
+        }
 
-            tl.from(".gs-y-reveal", {
+        // --- Loader Animation ---
+        const dPath = document.getElementById('d-path');
+        gsap.to(dPath, {
+            strokeDashoffset: 0,
+            duration: 2,
+            ease: "expo.inOut",
+            onComplete: () => {
+                gsap.to("#loader", {
+                    yPercent: -100,
+                    duration: 1,
+                    ease: "power4.inOut",
+                    onComplete: () => {
+                        document.getElementById('loader').style.display = 'none';
+                        initAllAnimations();
+                    }
+                });
+            }
+        });
+
+        function initAllAnimations() {
+            // Hero Animations
+            gsap.from(".gs-reveal-up", {
                 y: 100,
                 opacity: 0,
-                duration: 1.2,
+                duration: 1.5,
                 stagger: 0.2,
                 ease: "power4.out"
             });
 
-            // Scroll Reveal Animations
-            const revealElements = document.querySelectorAll(".gs-reveal");
-            revealElements.forEach((el) => {
-                gsap.from(el, {
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 85%",
-                    },
-                    y: 80,
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power3.out"
-                });
+            gsap.from(".gs-reveal-scale", {
+                scale: 0.8,
+                opacity: 0,
+                duration: 2,
+                ease: "expo.out"
             });
 
-            // Parallax effect for portfolio images
-            gsap.utils.toArray('.portfolio-img').forEach(img => {
-                gsap.to(img, {
-                    yPercent: 15,
-                    ease: 'none',
+            // Stats Counter
+            const counters = document.querySelectorAll('[data-target]');
+            counters.forEach(c => {
+                const target = +c.dataset.target;
+                gsap.to(c, {
+                    innerText: target,
+                    duration: 3,
+                    snap: { innerText: 1 },
                     scrollTrigger: {
-                        trigger: img,
-                        scrub: true
+                        trigger: c,
+                        start: "top 90%",
                     }
                 });
             });
-        };
 
-        // Smooth Scroll Placeholder (Simplified)
+            // Section Reveal
+            gsap.utils.toArray(".service-card-new").forEach(card => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 95%",
+                    },
+                    y: 100,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+
+            // Blob Floating
+            gsap.to("#blob1", {
+                x: 100, y: 150,
+                duration: 10,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+            gsap.to("#blob2", {
+                x: -150, y: -100,
+                duration: 12,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        }
+
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
+            });
+        });
+
+        // Interactive Cursor Hover
+        document.querySelectorAll('a, button, .service-card-new').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(follower, { scale: 2, background: 'rgba(255,92,0,0.1)', borderColor: 'transparent', duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(follower, { scale: 1, background: 'transparent', borderColor: 'rgba(255,92,0,0.5)', duration: 0.3 });
             });
         });
     </script>
