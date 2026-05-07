@@ -1,286 +1,825 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>الدعم الفني</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;900&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#070a18;
-  --v:#7c3aed;--n:#06b6d4;--g:#10b981;
-  --border:rgba(255,255,255,0.08);
-  --glass:rgba(255,255,255,0.05);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>الدعم الفني</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+/* ═══════════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════════ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
-html,body{height:100%;font-family:'Tajawal',sans-serif;background:var(--bg);color:#fff;overflow:hidden}
-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;max-width:600px;margin:0 auto}
 
-/* ── HEADER ── */
-.hdr{
-  flex-shrink:0;
-  background:linear-gradient(180deg,rgba(124,58,237,.2) 0%,transparent 100%);
-  border-bottom:1px solid var(--border);
-  padding:13px 16px;
-  display:flex;align-items:center;gap:13px;
-  animation:fadeDown .5s cubic-bezier(.16,1,.3,1) both}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+:root {
+  --bg:     #070a18;
+  --v:      #7c3aed;
+  --n:      #06b6d4;
+  --g:      #10b981;
+  --r:      #ef4444;
+  --border: rgba(255, 255, 255, 0.08);
+}
 
-.av-ring{
-  position:relative;width:48px;height:48px;flex-shrink:0;
-  border-radius:50%;
-  background:conic-gradient(from 0deg,var(--v),var(--n),var(--g),var(--v));
-  padding:2.5px;
-  box-shadow:0 0 18px rgba(124,58,237,.55);
-  animation:ringGlow 3s ease-in-out infinite}
-@keyframes ringGlow{
-  0%,100%{box-shadow:0 0 18px rgba(124,58,237,.55)}
-  50%{box-shadow:0 0 26px rgba(6,182,212,.7),0 0 44px rgba(6,182,212,.2)}}
-.av-ring.spin-ring{animation:ringGlow 3s ease-in-out infinite,ringRotate 6s linear infinite}
-@keyframes ringRotate{to{transform:rotate(360deg)}}
-.av-inner{
-  width:100%;height:100%;border-radius:50%;overflow:hidden;
-  border:2px solid var(--bg);background:var(--bg)}
-.av-inner img{width:100%;height:100%;object-fit:cover;display:block}
+html, body {
+  height: 100%;
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: #fff;
+  overflow: hidden;
+}
 
-.online-dot{
-  position:absolute;bottom:1px;right:1px;
-  width:11px;height:11px;border-radius:50%;
-  background:var(--g);border:2px solid var(--bg);
-  animation:dotBlink 1.8s ease-in-out infinite;z-index:2}
-@keyframes dotBlink{
-  0%,100%{box-shadow:0 0 4px var(--g)}
-  50%{box-shadow:0 0 10px var(--g),0 0 18px rgba(16,185,129,.35)}}
+/* ═══════════════════════════════════════
+   CANVAS
+═══════════════════════════════════════ */
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 
-.hdr-info{flex:1}
-.hdr-name{font-size:15px;font-weight:800;
-  background:linear-gradient(90deg,#fff 20%,var(--n));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hdr-st{font-size:11px;color:var(--g);display:flex;align-items:center;gap:4px;margin-top:1px}
-.hdr-st::before{content:'';width:5px;height:5px;border-radius:50%;
-  background:var(--g);flex-shrink:0;animation:dotBlink 1.8s ease-in-out infinite}
+/* ═══════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════ */
+.app {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+}
 
-/* ── MESSAGES ── */
-.msgs{
-  flex:1;overflow-y:auto;padding:16px 14px 8px;
-  display:flex;flex-direction:column;gap:11px;
-  scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.2) transparent}
-.msgs::-webkit-scrollbar{width:3px}
-.msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.2);border-radius:3px}
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.hdr {
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.2) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  animation: fadeDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
 
-/* welcome */
-.welcome{
-  background:linear-gradient(135deg,rgba(124,58,237,.11),rgba(6,182,212,.06));
-  border:1px solid rgba(124,58,237,.16);border-radius:20px;
-  padding:20px 16px;text-align:center;
-  animation:msgIn .4s .1s cubic-bezier(.16,1,.3,1) both}
-.wlc-ring{
-  width:64px;height:64px;border-radius:50%;
-  background:conic-gradient(from 0deg,var(--v),var(--n),var(--g),var(--v));
-  padding:2.5px;margin:0 auto 11px;
-  box-shadow:0 0 20px rgba(124,58,237,.4);
-  animation:ringRotate 5s linear infinite}
-.wlc-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:2px solid var(--bg)}
-.wlc-inner img{width:100%;height:100%;object-fit:cover;display:block}
-.wlc-title{font-size:15px;font-weight:800;
-  background:linear-gradient(90deg,#fff,var(--n));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
-.wlc-sub{font-size:12px;color:rgba(255,255,255,.38);line-height:1.65}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-/* loading skeleton */
-.skeleton{
-  background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%);
-  background-size:200% 100%;
-  animation:shimmer 1.4s infinite;border-radius:12px;height:52px;margin:4px 0}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.av-ring {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--v), var(--n), var(--g), var(--v));
+  padding: 2.5px;
+  box-shadow: 0 0 18px rgba(124, 58, 237, 0.55);
+  animation: ringGlow 3s ease-in-out infinite;
+}
 
-/* date pill */
-.date-pill{text-align:center}
-.date-pill span{
-  font-size:10px;color:rgba(255,255,255,.25);
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  border-radius:50px;padding:3px 10px;display:inline-block}
+@keyframes ringGlow {
+  0%,  100% { box-shadow: 0 0 18px rgba(124, 58, 237, 0.55); }
+  50%        { box-shadow: 0 0 26px rgba(6, 182, 212, 0.7), 0 0 44px rgba(6, 182, 212, 0.2); }
+}
 
-/* bubble row */
-.brow{display:flex;flex-direction:column;max-width:80%;
-  animation:msgIn .3s cubic-bezier(.16,1,.3,1) both}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.brow.me{align-self:flex-end;align-items:flex-end}
-.brow.ag{align-self:flex-start;align-items:flex-start}
+.spin-ring {
+  animation: ringGlow 3s ease-in-out infinite, ringRotate 6s linear infinite;
+}
 
-.btop{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.smav{width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;
-  border:1px solid rgba(124,58,237,.3)}
-.smav img{width:100%;height:100%;object-fit:cover;display:block}
-.smav.u{background:linear-gradient(135deg,var(--v),var(--n));
-  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
-.bname{font-size:10px;color:rgba(255,255,255,.28)}
+@keyframes ringRotate {
+  to { transform: rotate(360deg); }
+}
 
-.bubble{padding:11px 14px;border-radius:18px;font-size:14px;line-height:1.65;word-break:break-word}
-.brow.me .bubble{
-  background:linear-gradient(135deg,rgba(124,58,237,.38),rgba(6,182,212,.22));
-  border:1px solid rgba(124,58,237,.28);border-bottom-right-radius:4px;
-  box-shadow:0 4px 14px rgba(124,58,237,.14)}
-.brow.ag .bubble{
-  background:rgba(255,255,255,.06);border:1px solid var(--border);
-  border-bottom-left-radius:4px}
+.av-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--bg);
+  background: linear-gradient(135deg, #1e1b4b, #0e1a2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-.bmeta{font-size:10px;color:rgba(255,255,255,.22);margin-top:3px;
-  display:flex;align-items:center;gap:4px}
-.tick{color:var(--n);opacity:.7}
+.agent-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
-/* typing */
-.typing{display:flex;align-items:center;gap:7px;align-self:flex-start;
-  opacity:0;transition:opacity .3s;pointer-events:none;padding:2px 0}
-.typing.on{opacity:1}
-.dots span{display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:rgba(255,255,255,.22);animation:bounce 1.2s ease-in-out infinite}
-.dots span:nth-child(2){animation-delay:.18s}
-.dots span:nth-child(3){animation-delay:.36s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px);background:var(--n)}}
-.typing-lbl{font-size:11px;color:rgba(255,255,255,.28)}
+.online-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--g);
+  border: 2px solid var(--bg);
+  animation: dotBlink 1.8s ease-in-out infinite;
+  z-index: 2;
+}
 
-/* ── INPUT BAR ── */
-.bar{
-  flex-shrink:0;padding:9px 12px 15px;
-  background:rgba(7,10,24,.92);border-top:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  animation:fadeUp .5s .2s cubic-bezier(.16,1,.3,1) both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dotBlink {
+  0%,  100% { box-shadow: 0 0 4px var(--g); }
+  50%        { box-shadow: 0 0 10px var(--g), 0 0 18px rgba(16, 185, 129, 0.35); }
+}
 
-.bar-row{display:flex;align-items:flex-end;gap:10px}
-.tawrap{flex:1;position:relative}
-.ta{
-  width:100%;background:rgba(255,255,255,.054);
-  border:1px solid rgba(255,255,255,.1);border-radius:22px;
-  color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;line-height:1.55;
-  padding:11px 17px;outline:none;resize:none;
-  max-height:120px;overflow-y:auto;min-height:46px;
-  transition:border-color .25s,background .25s,box-shadow .25s;
-  caret-color:var(--n);scrollbar-width:none}
-.ta::-webkit-scrollbar{display:none}
-.ta::placeholder{color:rgba(255,255,255,.2)}
-.ta:focus{border-color:rgba(124,58,237,.45);background:rgba(255,255,255,.074);
-  box-shadow:0 0 0 3px rgba(124,58,237,.09)}
-.gline{position:absolute;bottom:0;left:8%;right:8%;height:1.5px;border-radius:2px;
-  background:linear-gradient(90deg,var(--v),var(--n));
-  transform:scaleX(0);transform-origin:center;
-  transition:transform .35s cubic-bezier(.16,1,.3,1)}
-.tawrap:focus-within .gline{transform:scaleX(1)}
+.hdr-info { flex: 1; }
 
-/* send button */
-.sbtn{
-  width:46px;height:46px;border-radius:50%;border:none;flex-shrink:0;
-  background:linear-gradient(135deg,var(--v) 0%,#4f46e5 50%,var(--n) 100%);
-  background-size:200% 200%;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(124,58,237,.5);
-  transition:transform .2s,box-shadow .25s,background-position .5s;
-  overflow:hidden;position:relative}
-.sbtn::before{content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);
-  transform:translateX(-120%);transition:transform .6s}
-.sbtn:hover:not(:disabled){transform:scale(1.1);background-position:right center;
-  box-shadow:0 6px 28px rgba(124,58,237,.65)}
-.sbtn:hover:not(:disabled)::before{transform:translateX(120%)}
-.sbtn:active:not(:disabled){transform:scale(.94)}
-.sbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.sbtn svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;
-  stroke-linecap:round;stroke-linejoin:round;transition:transform .3s;flex-shrink:0}
-.sbtn:hover:not(:disabled) svg{transform:translateX(-2px) translateY(-2px)}
-.spin{display:none;width:18px;height:18px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.22);border-top-color:#fff;
-  animation:spinR .65s linear infinite}
-@keyframes spinR{to{transform:rotate(360deg)}}
+.hdr-name {
+  font-size: 15px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #fff 20%, var(--n));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-/* toast */
-.toast{
-  position:fixed;bottom:78px;left:50%;
-  transform:translateX(-50%) translateY(10px);
-  z-index:99;padding:10px 20px;border-radius:50px;
-  font-size:13px;font-weight:600;backdrop-filter:blur(18px);
-  opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);
-  white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:7px}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.ok{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.28);color:#6ee7b7}
-.toast.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.28);color:#fca5a5}
-</style>
+.hdr-st {
+  font-size: 11px;
+  color: var(--g);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+}
+
+.hdr-st::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--g);
+  flex-shrink: 0;
+  animation: dotBlink 1.8s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════
+   MESSAGES AREA
+═══════════════════════════════════════ */
+.msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 58, 237, 0.2) transparent;
+}
+
+.msgs::-webkit-scrollbar { width: 3px; }
+.msgs::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 3px;
+}
+
+/* Welcome Card */
+.welcome {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.11), rgba(6, 182, 212, 0.06));
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 20px;
+  padding: 20px 16px;
+  text-align: center;
+  animation: msgIn 0.4s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.wlc-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--v), var(--n), var(--g), var(--v));
+  padding: 2.5px;
+  margin: 0 auto 11px;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+  animation: ringRotate 5s linear infinite;
+}
+
+.wlc-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--bg);
+  background: linear-gradient(135deg, #1e1b4b, #0e1a2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wlc-title {
+  font-size: 15px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #fff, var(--n));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 5px;
+}
+
+.wlc-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+  line-height: 1.65;
+}
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 12px;
+  height: 52px;
+  margin: 4px 0;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Date Separator */
+.date-pill { text-align: center; }
+
+.date-pill span {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 3px 10px;
+  display: inline-block;
+}
+
+/* Bubble Row */
+.brow {
+  display: flex;
+  flex-direction: column;
+  max-width: 82%;
+  animation: msgIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.brow.me { align-self: flex-end;   align-items: flex-end; }
+.brow.ag { align-self: flex-start; align-items: flex-start; }
+
+.btop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.smav {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  background: linear-gradient(135deg, #1e1b4b, #0e1a2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.smav.u {
+  background: linear-gradient(135deg, var(--v), var(--n));
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.smav .agent-svg { width: 22px; height: 22px; }
+
+.bname {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* Text bubble */
+.bubble {
+  padding: 11px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.brow.me .bubble {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.38), rgba(6, 182, 212, 0.22));
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.14);
+}
+
+.brow.ag .bubble {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+/* Image bubble */
+.img-bubble {
+  max-width: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.img-bubble:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.img-bubble img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 280px;
+  object-fit: cover;
+}
+
+.brow.me .img-bubble { border-bottom-right-radius: 4px; }
+.brow.ag .img-bubble { border-bottom-left-radius: 4px; }
+
+/* Upload progress */
+.upload-progress-wrap { width: 180px; margin-top: 4px; }
+
+.upload-progress-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--v), var(--n));
+  border-radius: 2px;
+  transition: width 0.3s;
+  animation: progressPulse 1s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* Message meta */
+.bmeta {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.22);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tick { color: var(--n); opacity: 0.7; }
+
+/* Typing indicator */
+.typing {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  padding: 2px 0;
+}
+
+.typing.on { opacity: 1; }
+
+.dots span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  animation: bounce 1.2s ease-in-out infinite;
+}
+
+.dots span:nth-child(2) { animation-delay: 0.18s; }
+.dots span:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes bounce {
+  0%,  60%, 100% { transform: translateY(0); }
+  30%             { transform: translateY(-7px); background: var(--n); }
+}
+
+.typing-lbl {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* ═══════════════════════════════════════
+   INPUT BAR
+═══════════════════════════════════════ */
+.bar {
+  flex-shrink: 0;
+  padding: 8px 12px 15px;
+  background: rgba(7, 10, 24, 0.93);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(18px);
+  animation: fadeUp 0.5s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Image preview strip */
+.img-preview-wrap { display: none; margin-bottom: 8px; }
+.img-preview-wrap.show { display: block; }
+
+.img-preview-inner {
+  position: relative;
+  display: inline-block;
+}
+
+.img-preview-inner img {
+  height: 72px;
+  width: auto;
+  max-width: 140px;
+  border-radius: 10px;
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  object-fit: cover;
+  display: block;
+}
+
+.img-remove-btn {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--r);
+  border: none;
+  color: #fff;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.img-remove-btn:hover { transform: scale(1.15); }
+
+.bar-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Image upload button */
+.img-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.4);
+  transition: all 0.22s;
+  margin-bottom: 2px;
+}
+
+.img-btn svg { width: 18px; height: 18px; pointer-events: none; }
+
+.img-btn:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.4);
+  color: #c4b5fd;
+}
+
+.img-btn.has-img {
+  background: rgba(124, 58, 237, 0.2);
+  border-color: rgba(124, 58, 237, 0.5);
+  color: #c4b5fd;
+}
+
+/* Textarea */
+.tawrap { flex: 1; position: relative; }
+
+.ta {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.054);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  padding: 11px 17px;
+  outline: none;
+  resize: none;
+  max-height: 120px;
+  overflow-y: auto;
+  min-height: 46px;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  caret-color: var(--n);
+  scrollbar-width: none;
+}
+
+.ta::-webkit-scrollbar { display: none; }
+.ta::placeholder { color: rgba(255, 255, 255, 0.2); }
+
+.ta:focus {
+  border-color: rgba(124, 58, 237, 0.45);
+  background: rgba(255, 255, 255, 0.074);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.09);
+}
+
+.gline {
+  position: absolute;
+  bottom: 0;
+  left: 8%;
+  right: 8%;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--v), var(--n));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tawrap:focus-within .gline { transform: scaleX(1); }
+
+/* Send button */
+.sbtn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--v) 0%, #4f46e5 50%, var(--n) 100%);
+  background-size: 200% 200%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5);
+  transition: transform 0.2s, box-shadow 0.25s, background-position 0.5s;
+  overflow: hidden;
+  position: relative;
+}
+
+.sbtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.6s;
+}
+
+.sbtn:hover:not(:disabled) {
+  transform: scale(1.1);
+  background-position: right center;
+  box-shadow: 0 6px 28px rgba(124, 58, 237, 0.65);
+}
+
+.sbtn:hover:not(:disabled)::before { transform: translateX(120%); }
+.sbtn:active:not(:disabled)        { transform: scale(0.94); }
+.sbtn:disabled                     { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.sbtn svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.sbtn:hover:not(:disabled) svg { transform: translateX(-2px) translateY(-2px); }
+
+.spin {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #fff;
+  animation: spinR 0.65s linear infinite;
+}
+
+@keyframes spinR { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 78px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  z-index: 99;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.toast.on  { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.ok  { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.28); color: #6ee7b7; }
+.toast.err { background: rgba(239, 68, 68, 0.15);  border: 1px solid rgba(239, 68, 68, 0.28);  color: #fca5a5; }
+
+/* ═══════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(8px);
+}
+
+.lightbox.on { opacity: 1; pointer-events: all; }
+
+.lightbox img {
+  max-width: 92vw;
+  max-height: 88vh;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  animation: lbIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes lbIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.lightbox-close:hover { background: rgba(255, 255, 255, 0.2); }
+  </style>
 </head>
 <body>
-<canvas id="c"></canvas>
 
-<div class="app">
+  <canvas id="bgCanvas"></canvas>
 
-  <!-- HEADER -->
-  <div class="hdr">
-    <div class="av-ring spin-ring">
-      <div class="av-inner">
-        <img src="https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=200&h=200&fit=crop&crop=face"
-          alt="agent"
-          onerror="this.src='https://i.postimg.cc/zfcqRQYc/images-(5).png'">
+  <div class="app">
+
+    <!-- ═══ HEADER ═══ -->
+    <div class="hdr">
+      <div class="av-ring spin-ring">
+        <div class="av-inner">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="agent-svg">
+            <circle cx="50" cy="36" r="18" fill="#a78bfa"/>
+            <rect x="22" y="58" width="56" height="28" rx="14" fill="#7c3aed"/>
+            <path d="M26 38 Q20 38 20 46 Q20 54 28 54" stroke="#06b6d4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M74 38 Q80 38 80 46 Q80 54 72 54" stroke="#06b6d4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M26 38 Q26 18 50 18 Q74 18 74 38" stroke="#06b6d4" stroke-width="3" fill="none"/>
+            <circle cx="50" cy="72" r="3" fill="rgba(255,255,255,0.4)"/>
+          </svg>
+        </div>
+        <div class="online-dot"></div>
       </div>
-      <div class="online-dot"></div>
+      <div class="hdr-info">
+        <div class="hdr-name">فريق الدعم الفني 🎮</div>
+        <div class="hdr-st">متصل الآن — يرد خلال دقائق</div>
+      </div>
     </div>
-    <div class="hdr-info">
-      <div class="hdr-name">فريق الدعم الفني 🎮</div>
-      <div class="hdr-st">متصل الآن — يرد خلال دقائق</div>
-    </div>
-  </div>
 
-  <!-- MESSAGES -->
-  <div class="msgs" id="msgs">
-    <!-- Welcome card -->
-    <div class="welcome">
-      <div class="wlc-ring">
-        <div class="wlc-inner">
-          <img src="https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=200&h=200&fit=crop&crop=face"
-            alt="agent"
-            onerror="this.src='https://i.postimg.cc/zfcqRQYc/images-(5).png'">
+    <!-- ═══ MESSAGES ═══ -->
+    <div class="msgs" id="msgs">
+
+      <div class="welcome">
+        <div class="wlc-ring">
+          <div class="wlc-inner">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="agent-svg">
+              <circle cx="50" cy="36" r="18" fill="#a78bfa"/>
+              <rect x="22" y="58" width="56" height="28" rx="14" fill="#7c3aed"/>
+              <path d="M26 38 Q20 38 20 46 Q20 54 28 54" stroke="#06b6d4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <path d="M74 38 Q80 38 80 46 Q80 54 72 54" stroke="#06b6d4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <path d="M26 38 Q26 18 50 18 Q74 18 74 38" stroke="#06b6d4" stroke-width="3" fill="none"/>
+              <circle cx="50" cy="72" r="3" fill="rgba(255,255,255,0.4)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="wlc-title">مرحباً! كيف نساعدك؟ 👋</div>
+        <div class="wlc-sub">أرسل رسالتك أو صورة وسيرد عليك فريقنا في أقرب وقت<br>محادثتك محفوظة دائماً 🔒</div>
+      </div>
+
+      <div class="typing" id="typing">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <span class="typing-lbl">فريق الدعم يكتب...</span>
+      </div>
+
+    </div>
+
+    <!-- ═══ INPUT BAR ═══ -->
+    <div class="bar">
+
+      <div class="img-preview-wrap" id="imgPreviewWrap">
+        <div class="img-preview-inner">
+          <img id="imgPreview" src="" alt="معاينة" />
+          <button class="img-remove-btn" onclick="removeImage()" title="إزالة الصورة">✕</button>
         </div>
       </div>
-      <div class="wlc-title">مرحباً! كيف نساعدك؟ 👋</div>
-      <div class="wlc-sub">أرسل رسالتك وسيرد عليك فريقنا في أقرب وقت<br>محادثتك محفوظة دائماً 🔒</div>
-    </div>
 
-    <!-- Typing indicator (persistent element) -->
-    <div class="typing" id="typing">
-      <div class="dots"><span></span><span></span><span></span></div>
-      <span class="typing-lbl">فريق الدعم يكتب...</span>
-    </div>
-  </div>
+      <div class="bar-row">
 
-  <!-- INPUT BAR -->
-  <div class="bar">
-    <div class="bar-row">
-      <div class="tawrap">
-        <textarea class="ta" id="ta" placeholder="اكتب رسالتك..." rows="1"
-          oninput="resizeTA(this)" onkeydown="onKey(event)"></textarea>
-        <div class="gline"></div>
+        <label class="img-btn" title="إرفاق صورة">
+          <input type="file" id="imgInput" accept="image/*" onchange="onImageSelect(event)" hidden />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </label>
+
+        <div class="tawrap">
+          <textarea class="ta" id="ta" placeholder="اكتب رسالتك..." rows="1"
+            oninput="resizeTA(this)" onkeydown="onKey(event)"></textarea>
+          <div class="gline"></div>
+        </div>
+
+        <button class="sbtn" id="sbtn" onclick="sendMsg()">
+          <svg id="sico" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2" fill="#fff" stroke="none"/>
+          </svg>
+          <div class="spin" id="spin"></div>
+        </button>
+
       </div>
-      <button class="sbtn" id="sbtn" onclick="sendMsg()">
-        <svg id="sico" viewBox="0 0 24 24">
-          <line x1="22" y1="2" x2="11" y2="13"/>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
-        <div class="spin" id="spin"></div>
-      </button>
     </div>
+
   </div>
 
-</div>
+  <div class="toast" id="toast"></div>
 
-<div class="toast" id="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+/* ═══════════════════════════════════════════════════════════
+   SUPABASE
+═══════════════════════════════════════════════════════════ */
+const SUPABASE_URL    = 'https://lckwwtfqaiihaqlwvbiz.supabase.co';
+const SUPABASE_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxja3d3dGZxYWlpaGFxbHd2Yml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTkzODUsImV4cCI6MjA5MTczNTM4NX0.uN_1oKSTCIrnGwCdPz41x20xnMb4CyKXoTqYXO9vbTE';
+const STORAGE_BUCKET  = 'chat-images';
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-/* ════ SUPABASE ════ */
-const db = supabase.createClient(
-  'https://lckwwtfqaiihaqlwvbiz.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxja3d3dGZxYWlpaGFxbHd2Yml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTkzODUsImV4cCI6MjA5MTczNTM4NX0.uN_1oKSTCIrnGwCdPz41x20xnMb4CyKXoTqYXO9vbTE'
-);
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* ════ SESSION ID — واحد لكل جهاز يتحمل دايماً ════ */
+/* ═══════════════════════════════════════════════════════════
+   SESSION ID — واحد لكل جهاز، محفوظ في localStorage
+═══════════════════════════════════════════════════════════ */
 function getSessionId() {
   let sid = localStorage.getItem('sup_sid');
   if (!sid) {
@@ -289,135 +828,287 @@ function getSessionId() {
   }
   return sid;
 }
+
 const SESSION_ID = getSessionId();
 
-let busy = false;
-let sessionMessages = []; // local cache
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+let busy            = false;
+let sessionMessages = [];
+let selectedFile    = null;
 
-/* ════ PARTICLES ════ */
-(()=>{
-  const cv=document.getElementById('c'),cx=cv.getContext('2d');
-  let W,H,pts=[];
-  const rsz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};
-  rsz();window.addEventListener('resize',rsz);
-  const hs=[220,260,180,300];
-  class P{
-    reset(){this.x=Math.random()*W;this.y=Math.random()*H;
-      this.vx=(Math.random()-.5)*.22;this.vy=(Math.random()-.5)*.22;
-      this.r=Math.random()*1.1+.3;this.a=Math.random()*.38+.1;
-      this.h=hs[Math.floor(Math.random()*hs.length)]}
-    tick(){this.x+=this.vx;this.y+=this.vy;
-      if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset()}
-    draw(){cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);
-      cx.fillStyle=`hsla(${this.h},100%,72%,${this.a})`;cx.fill()}
+/* ═══════════════════════════════════════════════════════════
+   PARTICLES
+═══════════════════════════════════════════════════════════ */
+(function initParticles() {
+  const cv = document.getElementById('bgCanvas');
+  const cx = cv.getContext('2d');
+  let W, H, pts = [];
+
+  function resize() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const HUE = [220, 260, 180, 300];
+
+  class Particle {
+    reset() {
+      this.x  = Math.random() * W;
+      this.y  = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.22;
+      this.vy = (Math.random() - 0.5) * 0.22;
+      this.r  = Math.random() * 1.1 + 0.3;
+      this.a  = Math.random() * 0.38 + 0.1;
+      this.h  = HUE[Math.floor(Math.random() * HUE.length)];
+    }
+    tick() {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      cx.beginPath(); cx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      cx.fillStyle = `hsla(${this.h},100%,72%,${this.a})`; cx.fill();
+    }
   }
-  for(let i=0;i<65;i++){const p=new P();p.reset();pts.push(p)}
-  (function loop(){
-    cx.clearRect(0,0,W,H);
-    pts.forEach(p=>{p.tick();p.draw()});
-    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
-      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<95){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);
-        cx.strokeStyle=`rgba(124,58,237,${.08*(1-d/95)})`;cx.lineWidth=.4;cx.stroke()}}
-    requestAnimationFrame(loop)
+
+  for (let i = 0; i < 65; i++) { const p = new Particle(); p.reset(); pts.push(p); }
+
+  function lines() {
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+        const d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < 95) {
+          cx.beginPath(); cx.moveTo(pts[i].x, pts[i].y); cx.lineTo(pts[j].x, pts[j].y);
+          cx.strokeStyle = `rgba(124,58,237,${0.08*(1-d/95)})`; cx.lineWidth = 0.4; cx.stroke();
+        }
+      }
+    }
+  }
+
+  (function loop() {
+    cx.clearRect(0, 0, W, H);
+    pts.forEach(p => { p.tick(); p.draw(); });
+    lines();
+    requestAnimationFrame(loop);
   })();
 })();
 
-/* ════ HELPERS ════ */
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function timeStr(ts){
-  return new Date(ts).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})
-}
-function dateStr(ts){
-  const d=new Date(ts);
-  const today=new Date();
-  if(d.toDateString()===today.toDateString()) return 'اليوم';
-  return d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'short'});
-}
-function resizeTA(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
-function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}}
-function scrollBot(){const m=document.getElementById('msgs');m.scrollTop=m.scrollHeight}
-
-function showToast(msg,type='ok'){
-  const t=document.getElementById('toast');
-  t.innerHTML=`<span>${type==='ok'?'✓':'✕'}</span><span>${msg}</span>`;
-  t.className=`toast ${type} on`;
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3200)
+/* ═══════════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════════ */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-/* ════ TYPING ════ */
-function showTyping(ms=2400){
-  const t=document.getElementById('typing');
-  const msgs=document.getElementById('msgs');
-  msgs.appendChild(t); // always last
-  t.classList.add('on'); scrollBot();
-  setTimeout(()=>t.classList.remove('on'),ms)
+function timeStr(ts) {
+  return new Date(ts).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 }
 
-/* ════ RENDER BUBBLE ════ */
-const AGENT_IMG = 'https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=200&h=200&fit=crop&crop=face';
+function dateStr(ts) {
+  const d = new Date(ts), today = new Date();
+  if (d.toDateString() === today.toDateString()) return 'اليوم';
+  return d.toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'short' });
+}
 
-function renderBubble(msg, animate=true){
+function resizeTA(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function onKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+function scrollBot() {
+  const m = document.getElementById('msgs');
+  if (m) m.scrollTop = m.scrollHeight;
+}
+
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.innerHTML = `<span>${type === 'ok' ? '✓' : '✕'}</span><span>${msg}</span>`;
+  t.className = `toast ${type} on`;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('on'), 3200);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AGENT SVG (أيقونة بدون ملامح وجه)
+═══════════════════════════════════════════════════════════ */
+const AGENT_SVG = `
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="agent-svg">
+  <circle cx="50" cy="36" r="18" fill="#a78bfa"/>
+  <rect x="22" y="58" width="56" height="28" rx="14" fill="#7c3aed"/>
+  <path d="M26 38 Q20 38 20 46 Q20 54 28 54" stroke="#06b6d4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M74 38 Q80 38 80 46 Q80 54 72 54" stroke="#06b6d4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M26 38 Q26 18 50 18 Q74 18 74 38" stroke="#06b6d4" stroke-width="3" fill="none"/>
+  <circle cx="50" cy="72" r="3" fill="rgba(255,255,255,0.4)"/>
+</svg>`;
+
+/* ═══════════════════════════════════════════════════════════
+   TYPING INDICATOR
+═══════════════════════════════════════════════════════════ */
+function showTyping(ms = 2400) {
+  const t = document.getElementById('typing');
+  const m = document.getElementById('msgs');
+  m.appendChild(t);
+  t.classList.add('on');
+  scrollBot();
+  setTimeout(() => t.classList.remove('on'), ms);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER BUBBLE
+═══════════════════════════════════════════════════════════ */
+function renderBubble(msg, animate = true) {
   const isMe = msg.role === 'user';
   const wrap = document.createElement('div');
-  wrap.className = `brow ${isMe?'me':'ag'}`;
-  if(!animate) wrap.style.animation='none';
+  wrap.className = `brow ${isMe ? 'me' : 'ag'}`;
+  if (!animate) wrap.style.animation = 'none';
 
   const avHtml = isMe
     ? `<div class="smav u">أ</div>`
-    : `<div class="smav"><img src="${AGENT_IMG}" alt="a" onerror="this.src='https://i.postimg.cc/zfcqRQYc/images-(5).png'"></div>`;
+    : `<div class="smav">${AGENT_SVG}</div>`;
 
-  const name = isMe ? 'أنت' : 'فريق الدعم';
   const tick = isMe ? `<span class="tick">✓✓</span>` : '';
+  const name = isMe ? 'أنت' : 'فريق الدعم';
+
+  let content;
+  if (msg.type === 'image' && msg.imageUrl) {
+    content = `
+      <div class="img-bubble" onclick="openLightbox('${esc(msg.imageUrl)}')">
+        <img src="${esc(msg.imageUrl)}" alt="صورة مرفقة" loading="lazy"/>
+      </div>`;
+  } else {
+    content = `<div class="bubble">${esc(msg.text)}</div>`;
+  }
 
   wrap.innerHTML = `
     <div class="btop">${avHtml}<span class="bname">${name}</span></div>
-    <div class="bubble">${esc(msg.text)}</div>
+    ${content}
     <div class="bmeta">${timeStr(msg.ts)}${tick}</div>`;
 
   return wrap;
 }
 
-/* ════ RENDER ALL MESSAGES (with date separators) ════ */
-function renderAll(messages, animate=false){
+/* ═══════════════════════════════════════════════════════════
+   RENDER ALL
+═══════════════════════════════════════════════════════════ */
+function renderAll(messages, animate = false) {
   const msgsEl = document.getElementById('msgs');
-  const typing = document.getElementById('typing');
-
-  // remove old bubbles (keep welcome + typing)
-  msgsEl.querySelectorAll('.brow,.date-pill').forEach(el=>el.remove());
+  const typing  = document.getElementById('typing');
+  msgsEl.querySelectorAll('.brow, .date-pill').forEach(el => el.remove());
 
   let lastDate = '';
-  messages.forEach(msg=>{
+  messages.forEach(msg => {
     const d = dateStr(msg.ts);
-    if(d !== lastDate){
+    if (d !== lastDate) {
       lastDate = d;
       const sep = document.createElement('div');
       sep.className = 'date-pill';
       sep.innerHTML = `<span>${d}</span>`;
       msgsEl.insertBefore(sep, typing);
     }
-    const bubble = renderBubble(msg, animate);
-    msgsEl.insertBefore(bubble, typing);
+    msgsEl.insertBefore(renderBubble(msg, animate), typing);
   });
   scrollBot();
 }
 
-/* ════ AUTO REPLIES ════ */
-const AUTO = [
+/* ═══════════════════════════════════════════════════════════
+   IMAGE SELECT / REMOVE
+═══════════════════════════════════════════════════════════ */
+function onImageSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('حجم الصورة يجب أن يكون أقل من 5MB', 'err');
+    event.target.value = '';
+    return;
+  }
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('imgPreview').src = e.target.result;
+    document.getElementById('imgPreviewWrap').classList.add('show');
+    document.querySelector('.img-btn').classList.add('has-img');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage() {
+  selectedFile = null;
+  document.getElementById('imgInput').value   = '';
+  document.getElementById('imgPreview').src   = '';
+  document.getElementById('imgPreviewWrap').classList.remove('show');
+  document.querySelector('.img-btn').classList.remove('has-img');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UPLOAD TO SUPABASE STORAGE
+═══════════════════════════════════════════════════════════ */
+async function uploadImage(file) {
+  const ext      = file.name.split('.').pop().toLowerCase();
+  const filePath = `${SESSION_ID}/${SESSION_ID}_${Date.now()}.${ext}`;
+
+  const { error } = await db.storage
+    .from(STORAGE_BUCKET)
+    .upload(filePath, file, { contentType: file.type, upsert: false });
+
+  if (error) throw new Error('فشل رفع الصورة: ' + (error.message || JSON.stringify(error)));
+
+  const { data: urlData } = db.storage.from(STORAGE_BUCKET).getPublicUrl(filePath);
+  return urlData.publicUrl;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════════════════════ */
+function openLightbox(url) {
+  let lb = document.getElementById('lightbox');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'lightbox'; lb.className = 'lightbox';
+    lb.innerHTML = `
+      <img id="lbImg" src="" alt="صورة"/>
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>`;
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.body.appendChild(lb);
+  }
+  document.getElementById('lbImg').src = url;
+  lb.classList.add('on');
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  if (lb) lb.classList.remove('on');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AUTO REPLIES
+═══════════════════════════════════════════════════════════ */
+const AUTO_REPLIES = [
   'شكراً لتواصلك! تم استلام رسالتك وسيرد عليك أحد المختصين قريباً. 🛠️',
   'وصلتنا مشكلتك وسنعمل على حلها في أسرع وقت ممكن! 💪',
   'تم تسجيل طلبك بنجاح، فريقنا سيتواصل معك خلال دقائق. 🎮',
   'شكراً! نحن هنا لمساعدتك، سنرد عليك قريباً جداً. ✨',
 ];
 
-/* ════ LOAD SESSION FROM SUPABASE ════ */
-async function loadSession(){
-  // show skeleton
+/* ═══════════════════════════════════════════════════════════
+   LOAD SESSION
+═══════════════════════════════════════════════════════════ */
+async function loadSession() {
   const msgsEl = document.getElementById('msgs');
+  const typing  = document.getElementById('typing');
+
   const sk = document.createElement('div');
-  sk.id='sk';sk.innerHTML='<div class="skeleton"></div><div class="skeleton" style="width:70%;align-self:flex-end"></div>';
-  sk.style.cssText='display:flex;flex-direction:column;gap:10px;padding:0 2px';
-  msgsEl.insertBefore(sk, document.getElementById('typing'));
+  sk.id = 'sk';
+  sk.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:0 2px';
+  sk.innerHTML = `
+    <div class="skeleton"></div>
+    <div class="skeleton" style="width:70%;align-self:flex-end"></div>`;
+  msgsEl.insertBefore(sk, typing);
 
   try {
     const { data, error } = await db
@@ -428,89 +1119,119 @@ async function loadSession(){
 
     document.getElementById('sk')?.remove();
 
-    if(error && error.code !== 'PGRST116'){
-      // PGRST116 = not found, which is fine for new users
-      console.error(error);
-      return;
-    }
+    if (error && error.code !== 'PGRST116') { console.error(error); return; }
 
-    if(data && data.messages && data.messages.length > 0){
+    if (data && Array.isArray(data.messages) && data.messages.length > 0) {
       sessionMessages = data.messages;
       renderAll(sessionMessages, false);
-      showToast('تم استعادة محادثتك السابقة 🔒','ok');
+      showToast('تم استعادة محادثتك السابقة 🔒', 'ok');
     }
-  } catch(e){
+  } catch (e) {
     document.getElementById('sk')?.remove();
     console.error(e);
   }
 }
 
-/* ════ SAVE SESSION TO SUPABASE ════ */
-async function saveSession(){
+/* ═══════════════════════════════════════════════════════════
+   SAVE SESSION — upsert (محادثة واحدة لكل مستخدم دائماً)
+═══════════════════════════════════════════════════════════ */
+async function saveSession() {
   try {
-    // upsert: إذا موجود يحدث، إذا مش موجود ينشئ
     const { error } = await db
       .from('chat_sessions')
       .upsert(
         { session_id: SESSION_ID, messages: sessionMessages, updated_at: new Date().toISOString() },
         { onConflict: 'session_id' }
       );
-    if(error) throw error;
-  } catch(e){
+    if (error) throw error;
+  } catch (e) {
     const m = [e.message, e.details, e.hint].filter(Boolean).join(' ');
     console.error('Save error:', m);
-    showToast('تعذّر الحفظ: '+m,'err');
+    showToast('تعذّر الحفظ: ' + m, 'err');
   }
 }
 
-/* ════ SEND MESSAGE ════ */
-async function sendMsg(){
-  if(busy) return;
-  const ta = document.getElementById('ta');
-  const text = ta.value.trim();
-  if(!text){ ta.focus(); showToast('اكتب رسالتك أولاً','err'); return; }
+/* ═══════════════════════════════════════════════════════════
+   SEND MESSAGE
+═══════════════════════════════════════════════════════════ */
+async function sendMsg() {
+  if (busy) return;
+
+  const ta       = document.getElementById('ta');
+  const text     = ta.value.trim();
+  const hasImage = selectedFile !== null;
+
+  if (!text && !hasImage) { ta.focus(); showToast('اكتب رسالتك أو اختر صورة', 'err'); return; }
 
   busy = true;
-  const btn=document.getElementById('sbtn');
-  const ico=document.getElementById('sico');
-  const sp=document.getElementById('spin');
-  btn.disabled=true; ico.style.display='none'; sp.style.display='block';
+  const btn  = document.getElementById('sbtn');
+  const ico  = document.getElementById('sico');
+  const spin = document.getElementById('spin');
+  btn.disabled = true; ico.style.display = 'none'; spin.style.display = 'block';
 
-  // Add user message to local + render
-  const userMsg = { role:'user', text, ts: Date.now() };
-  sessionMessages.push(userMsg);
   const msgsEl = document.getElementById('msgs');
-  const typing = document.getElementById('typing');
-  const bubble = renderBubble(userMsg, true);
-  msgsEl.insertBefore(bubble, typing);
-  scrollBot();
+  const typing  = document.getElementById('typing');
 
-  ta.value=''; ta.style.height='auto';
+  try {
+    /* ── صورة ── */
+    if (hasImage) {
+      const loadRow = document.createElement('div');
+      loadRow.className = 'brow me';
+      loadRow.innerHTML = `
+        <div class="btop"><div class="smav u">أ</div><span class="bname">أنت</span></div>
+        <div class="upload-progress-wrap">
+          <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:4px">جاري رفع الصورة...</div>
+          <div class="upload-progress-bar" style="width:40%"></div>
+        </div>`;
+      msgsEl.insertBefore(loadRow, typing);
+      scrollBot();
 
-  // Save to Supabase (user message)
-  await saveSession();
+      const imageUrl = await uploadImage(selectedFile);
+      loadRow.remove();
 
-  btn.disabled=false; ico.style.display='block'; sp.style.display='none';
-  busy = false;
+      const imgMsg = { role: 'user', type: 'image', imageUrl, ts: Date.now() };
+      sessionMessages.push(imgMsg);
+      msgsEl.insertBefore(renderBubble(imgMsg, true), typing);
+      scrollBot();
+      removeImage();
+    }
 
-  // Auto reply
-  setTimeout(()=>showTyping(2200), 500);
-  setTimeout(async ()=>{
-    const replyText = AUTO[Math.floor(Math.random()*AUTO.length)];
-    const agentMsg = { role:'agent', text: replyText, ts: Date.now() };
-    sessionMessages.push(agentMsg);
+    /* ── نص ── */
+    if (text) {
+      const userMsg = { role: 'user', type: 'text', text, ts: Date.now() };
+      sessionMessages.push(userMsg);
+      msgsEl.insertBefore(renderBubble(userMsg, true), typing);
+      scrollBot();
+      ta.value = ''; ta.style.height = 'auto';
+    }
 
-    const rb = renderBubble(agentMsg, true);
-    msgsEl.insertBefore(rb, document.getElementById('typing'));
-    scrollBot();
-
-    // Save with agent reply
     await saveSession();
-  }, 2900);
+
+    /* رد تلقائي */
+    setTimeout(() => showTyping(2200), 500);
+    setTimeout(async () => {
+      const replyText = AUTO_REPLIES[Math.floor(Math.random() * AUTO_REPLIES.length)];
+      const agentMsg  = { role: 'agent', type: 'text', text: replyText, ts: Date.now() };
+      sessionMessages.push(agentMsg);
+      msgsEl.insertBefore(renderBubble(agentMsg, true), document.getElementById('typing'));
+      scrollBot();
+      await saveSession();
+    }, 2900);
+
+  } catch (e) {
+    showToast('خطأ: ' + ((e && e.message) ? e.message : JSON.stringify(e)), 'err');
+    console.error(e);
+  } finally {
+    busy = false;
+    btn.disabled = false; ico.style.display = 'block'; spin.style.display = 'none';
+  }
 }
 
-/* ════ INIT ════ */
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
 loadSession();
-</script>
+  </script>
+
 </body>
 </html>
