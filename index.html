@@ -2,274 +2,269 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>لوحة الدعم الفني — الإدارة</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>الدعم الفني</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0b0d1a;--side:#0f1220;--main:#111425;
-  --card:#161929;--card2:#1c2035;
-  --v:#7c3aed;--n:#06b6d4;--g:#10b981;--r:#ef4444;--a:#f59e0b;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);
-  --t1:#f1f5f9;--t2:#94a3b8;--t3:#475569;
+  --bg:#070a18;
+  --v:#7c3aed;--n:#06b6d4;--g:#10b981;
+  --border:rgba(255,255,255,0.08);
+  --glass:rgba(255,255,255,0.05);
 }
-html,body{height:100%;font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--t1);overflow:hidden}
+html,body{height:100%;font-family:'Tajawal',sans-serif;background:var(--bg);color:#fff;overflow:hidden}
+canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;max-width:600px;margin:0 auto}
 
-/* ══ LAYOUT ══ */
-.shell{display:flex;height:100vh;overflow:hidden}
+/* ── HEADER ── */
+.hdr{
+  flex-shrink:0;
+  background:linear-gradient(180deg,rgba(124,58,237,.2) 0%,transparent 100%);
+  border-bottom:1px solid var(--border);
+  padding:13px 16px;
+  display:flex;align-items:center;gap:13px;
+  animation:fadeDown .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══ SIDEBAR ══ */
-.side{
-  width:300px;flex-shrink:0;
-  background:var(--side);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;overflow:hidden}
+.av-ring{
+  position:relative;width:48px;height:48px;flex-shrink:0;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,var(--v),var(--n),var(--g),var(--v));
+  padding:2.5px;
+  box-shadow:0 0 18px rgba(124,58,237,.55);
+  animation:ringGlow 3s ease-in-out infinite}
+@keyframes ringGlow{
+  0%,100%{box-shadow:0 0 18px rgba(124,58,237,.55)}
+  50%{box-shadow:0 0 26px rgba(6,182,212,.7),0 0 44px rgba(6,182,212,.2)}}
+.av-ring.spin-ring{animation:ringGlow 3s ease-in-out infinite,ringRotate 6s linear infinite}
+@keyframes ringRotate{to{transform:rotate(360deg)}}
+.av-inner{
+  width:100%;height:100%;border-radius:50%;overflow:hidden;
+  border:2px solid var(--bg);background:var(--bg)}
+.av-inner img{width:100%;height:100%;object-fit:cover;display:block}
 
-.side-head{
-  padding:16px;border-bottom:1px solid var(--border);flex-shrink:0;
-  background:linear-gradient(180deg,rgba(124,58,237,.12) 0%,transparent 100%)}
-.side-title{font-size:16px;font-weight:900;margin-bottom:2px;
-  background:linear-gradient(90deg,#fff,var(--n));
+.online-dot{
+  position:absolute;bottom:1px;right:1px;
+  width:11px;height:11px;border-radius:50%;
+  background:var(--g);border:2px solid var(--bg);
+  animation:dotBlink 1.8s ease-in-out infinite;z-index:2}
+@keyframes dotBlink{
+  0%,100%{box-shadow:0 0 4px var(--g)}
+  50%{box-shadow:0 0 10px var(--g),0 0 18px rgba(16,185,129,.35)}}
+
+.hdr-info{flex:1}
+.hdr-name{font-size:15px;font-weight:800;
+  background:linear-gradient(90deg,#fff 20%,var(--n));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.side-sub{font-size:11px;color:var(--t3)}
+.hdr-st{font-size:11px;color:var(--g);display:flex;align-items:center;gap:4px;margin-top:1px}
+.hdr-st::before{content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--g);flex-shrink:0;animation:dotBlink 1.8s ease-in-out infinite}
 
-.search-wrap{padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
-.search{
-  width:100%;background:var(--card2);border:1px solid var(--border2);
-  border-radius:10px;color:var(--t1);font-family:'Tajawal',sans-serif;
-  font-size:13px;padding:8px 12px;outline:none;
-  transition:border-color .2s}
-.search::placeholder{color:var(--t3)}
-.search:focus{border-color:rgba(124,58,237,.4)}
-
-.sessions-list{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.2) transparent}
-.sessions-list::-webkit-scrollbar{width:3px}
-.sessions-list::-webkit-scrollbar-thumb{background:rgba(124,58,237,.2);border-radius:3px}
-
-.sess-item{
-  padding:13px 14px;border-bottom:1px solid var(--border);
-  cursor:pointer;transition:background .2s;display:flex;align-items:center;gap:10px;
-  position:relative}
-.sess-item:hover{background:rgba(255,255,255,.03)}
-.sess-item.active{background:rgba(124,58,237,.1);border-right:3px solid var(--v)}
-
-.sess-av{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--v),var(--n));
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:800;border:2px solid rgba(124,58,237,.3)}
-.sess-info{flex:1;min-width:0}
-.sess-id{font-size:12px;font-weight:700;color:var(--t1);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.sess-preview{font-size:11px;color:var(--t3);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sess-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
-.sess-time{font-size:10px;color:var(--t3)}
-.sess-badge{
-  background:var(--v);color:#fff;font-size:9px;font-weight:800;
-  border-radius:50px;padding:1px 6px;min-width:16px;text-align:center}
-
-.empty-side{text-align:center;padding:40px 16px;color:var(--t3);font-size:13px}
-
-/* ══ MAIN AREA ══ */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--main)}
-
-/* no selection state */
-.no-sel{
-  flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:12px;color:var(--t3)}
-.no-sel .icon{font-size:52px;opacity:.25}
-.no-sel p{font-size:14px}
-
-/* chat header */
-.chat-hdr{
-  flex-shrink:0;padding:13px 18px;
-  background:var(--card);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:12px}
-.chat-hdr-av{
-  width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--v),var(--n));
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:800;border:2px solid rgba(124,58,237,.3);flex-shrink:0}
-.chat-hdr-info{flex:1}
-.chat-hdr-name{font-size:14px;font-weight:800}
-.chat-hdr-sub{font-size:11px;color:var(--t3)}
-.chat-hdr-actions{display:flex;gap:8px}
-.hdr-btn{
-  padding:6px 12px;border-radius:8px;border:1px solid var(--border2);
-  background:var(--card2);color:var(--t2);font-family:'Tajawal',sans-serif;
-  font-size:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px}
-.hdr-btn:hover{background:rgba(255,255,255,.06);color:var(--t1)}
-.hdr-btn.danger:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#fca5a5}
-
-/* messages */
-.chat-msgs{
-  flex:1;overflow-y:auto;padding:16px 20px;
-  display:flex;flex-direction:column;gap:10px;
+/* ── MESSAGES ── */
+.msgs{
+  flex:1;overflow-y:auto;padding:16px 14px 8px;
+  display:flex;flex-direction:column;gap:11px;
   scrollbar-width:thin;scrollbar-color:rgba(124,58,237,.2) transparent}
-.chat-msgs::-webkit-scrollbar{width:3px}
-.chat-msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.2);border-radius:3px}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:rgba(124,58,237,.2);border-radius:3px}
 
-.date-sep{text-align:center;margin:4px 0}
-.date-sep span{
-  font-size:10px;color:var(--t3);background:var(--card);
-  border:1px solid var(--border);border-radius:50px;padding:3px 10px;display:inline-block}
+/* welcome */
+.welcome{
+  background:linear-gradient(135deg,rgba(124,58,237,.11),rgba(6,182,212,.06));
+  border:1px solid rgba(124,58,237,.16);border-radius:20px;
+  padding:20px 16px;text-align:center;
+  animation:msgIn .4s .1s cubic-bezier(.16,1,.3,1) both}
+.wlc-ring{
+  width:64px;height:64px;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--v),var(--n),var(--g),var(--v));
+  padding:2.5px;margin:0 auto 11px;
+  box-shadow:0 0 20px rgba(124,58,237,.4);
+  animation:ringRotate 5s linear infinite}
+.wlc-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;border:2px solid var(--bg)}
+.wlc-inner img{width:100%;height:100%;object-fit:cover;display:block}
+.wlc-title{font-size:15px;font-weight:800;
+  background:linear-gradient(90deg,#fff,var(--n));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+.wlc-sub{font-size:12px;color:rgba(255,255,255,.38);line-height:1.65}
 
-.mrow{display:flex;flex-direction:column;max-width:75%;animation:mIn .28s cubic-bezier(.16,1,.3,1) both}
-@keyframes mIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.mrow.user{align-self:flex-start;align-items:flex-start}
-.mrow.agent{align-self:flex-end;align-items:flex-end}
+/* loading skeleton */
+.skeleton{
+  background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;border-radius:12px;height:52px;margin:4px 0}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-.mtop{display:flex;align-items:center;gap:5px;margin-bottom:3px}
-.role-lbl{font-size:10px;color:var(--t3)}
-.role-icon{font-size:12px}
+/* date pill */
+.date-pill{text-align:center}
+.date-pill span{
+  font-size:10px;color:rgba(255,255,255,.25);
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:50px;padding:3px 10px;display:inline-block}
 
-.mbubble{
-  padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.65;word-break:break-word}
-.mrow.user .mbubble{
-  background:var(--card2);border:1px solid var(--border2);
-  border-bottom-left-radius:4px;color:var(--t1)}
-.mrow.agent .mbubble{
-  background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(6,182,212,.18));
-  border:1px solid rgba(124,58,237,.25);
-  border-bottom-right-radius:4px;color:#fff}
+/* bubble row */
+.brow{display:flex;flex-direction:column;max-width:80%;
+  animation:msgIn .3s cubic-bezier(.16,1,.3,1) both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.brow.me{align-self:flex-end;align-items:flex-end}
+.brow.ag{align-self:flex-start;align-items:flex-start}
 
-.mmeta{font-size:10px;color:var(--t3);margin-top:3px;display:flex;align-items:center;gap:4px}
-.agent-tick{color:var(--n);opacity:.8}
+.btop{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.smav{width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;
+  border:1px solid rgba(124,58,237,.3)}
+.smav img{width:100%;height:100%;object-fit:cover;display:block}
+.smav.u{background:linear-gradient(135deg,var(--v),var(--n));
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.bname{font-size:10px;color:rgba(255,255,255,.28)}
 
-/* reply bar */
-.reply-bar{
-  flex-shrink:0;padding:12px 16px 16px;
-  background:var(--card);border-top:1px solid var(--border)}
-.reply-label{font-size:11px;color:var(--t3);margin-bottom:7px;
-  display:flex;align-items:center;gap:5px}
-.reply-label::before{content:'↩';color:var(--v);font-weight:900}
-.reply-row{display:flex;gap:10px;align-items:flex-end}
-.reply-ta{
-  flex:1;background:var(--card2);border:1px solid var(--border2);
-  border-radius:14px;color:var(--t1);font-family:'Tajawal',sans-serif;
-  font-size:13px;line-height:1.55;padding:10px 14px;outline:none;
-  resize:none;max-height:110px;min-height:42px;overflow-y:auto;
-  transition:border-color .22s,box-shadow .22s;caret-color:var(--n);scrollbar-width:none}
-.reply-ta::-webkit-scrollbar{display:none}
-.reply-ta::placeholder{color:var(--t3)}
-.reply-ta:focus{border-color:rgba(124,58,237,.4);box-shadow:0 0 0 3px rgba(124,58,237,.08)}
-.send-btn{
-  width:42px;height:42px;border-radius:50%;border:none;flex-shrink:0;
-  background:linear-gradient(135deg,var(--v),#4f46e5);
+.bubble{padding:11px 14px;border-radius:18px;font-size:14px;line-height:1.65;word-break:break-word}
+.brow.me .bubble{
+  background:linear-gradient(135deg,rgba(124,58,237,.38),rgba(6,182,212,.22));
+  border:1px solid rgba(124,58,237,.28);border-bottom-right-radius:4px;
+  box-shadow:0 4px 14px rgba(124,58,237,.14)}
+.brow.ag .bubble{
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  border-bottom-left-radius:4px}
+
+.bmeta{font-size:10px;color:rgba(255,255,255,.22);margin-top:3px;
+  display:flex;align-items:center;gap:4px}
+.tick{color:var(--n);opacity:.7}
+
+/* typing */
+.typing{display:flex;align-items:center;gap:7px;align-self:flex-start;
+  opacity:0;transition:opacity .3s;pointer-events:none;padding:2px 0}
+.typing.on{opacity:1}
+.dots span{display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.22);animation:bounce 1.2s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.18s}
+.dots span:nth-child(3){animation-delay:.36s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px);background:var(--n)}}
+.typing-lbl{font-size:11px;color:rgba(255,255,255,.28)}
+
+/* ── INPUT BAR ── */
+.bar{
+  flex-shrink:0;padding:9px 12px 15px;
+  background:rgba(7,10,24,.92);border-top:1px solid var(--border);
+  backdrop-filter:blur(18px);
+  animation:fadeUp .5s .2s cubic-bezier(.16,1,.3,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.bar-row{display:flex;align-items:flex-end;gap:10px}
+.tawrap{flex:1;position:relative}
+.ta{
+  width:100%;background:rgba(255,255,255,.054);
+  border:1px solid rgba(255,255,255,.1);border-radius:22px;
+  color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;line-height:1.55;
+  padding:11px 17px;outline:none;resize:none;
+  max-height:120px;overflow-y:auto;min-height:46px;
+  transition:border-color .25s,background .25s,box-shadow .25s;
+  caret-color:var(--n);scrollbar-width:none}
+.ta::-webkit-scrollbar{display:none}
+.ta::placeholder{color:rgba(255,255,255,.2)}
+.ta:focus{border-color:rgba(124,58,237,.45);background:rgba(255,255,255,.074);
+  box-shadow:0 0 0 3px rgba(124,58,237,.09)}
+.gline{position:absolute;bottom:0;left:8%;right:8%;height:1.5px;border-radius:2px;
+  background:linear-gradient(90deg,var(--v),var(--n));
+  transform:scaleX(0);transform-origin:center;
+  transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.tawrap:focus-within .gline{transform:scaleX(1)}
+
+/* send button */
+.sbtn{
+  width:46px;height:46px;border-radius:50%;border:none;flex-shrink:0;
+  background:linear-gradient(135deg,var(--v) 0%,#4f46e5 50%,var(--n) 100%);
+  background-size:200% 200%;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(124,58,237,.4);transition:all .22s;overflow:hidden;position:relative}
-.send-btn::before{content:'';position:absolute;inset:0;
+  box-shadow:0 4px 20px rgba(124,58,237,.5);
+  transition:transform .2s,box-shadow .25s,background-position .5s;
+  overflow:hidden;position:relative}
+.sbtn::before{content:'';position:absolute;inset:0;
   background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);
-  transform:translateX(-120%);transition:transform .5s}
-.send-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 6px 22px rgba(124,58,237,.6)}
-.send-btn:hover:not(:disabled)::before{transform:translateX(120%)}
-.send-btn:active:not(:disabled){transform:scale(.94)}
-.send-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.send-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.sbspin{display:none;width:16px;height:16px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+  transform:translateX(-120%);transition:transform .6s}
+.sbtn:hover:not(:disabled){transform:scale(1.1);background-position:right center;
+  box-shadow:0 6px 28px rgba(124,58,237,.65)}
+.sbtn:hover:not(:disabled)::before{transform:translateX(120%)}
+.sbtn:active:not(:disabled){transform:scale(.94)}
+.sbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.sbtn svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .3s;flex-shrink:0}
+.sbtn:hover:not(:disabled) svg{transform:translateX(-2px) translateY(-2px)}
+.spin{display:none;width:18px;height:18px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.22);border-top-color:#fff;
+  animation:spinR .65s linear infinite}
+@keyframes spinR{to{transform:rotate(360deg)}}
 
-/* ══ STATS BAR ══ */
-.stats-bar{
-  display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;
-  background:var(--card)}
-.stat{
-  flex:1;padding:10px 12px;text-align:center;border-left:1px solid var(--border);
-  transition:background .2s}
-.stat:last-child{border-left:none}
-.stat-n{font-size:18px;font-weight:900;margin-bottom:1px}
-.stat-l{font-size:10px;color:var(--t3)}
-.stat-n.purple{background:linear-gradient(90deg,var(--v),var(--n));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-n.green{color:var(--g)}
-.stat-n.amber{color:var(--a)}
-
-/* ══ TOAST ══ */
+/* toast */
 .toast{
-  position:fixed;bottom:20px;left:50%;
-  transform:translateX(-50%) translateY(10px);z-index:99;
-  padding:10px 20px;border-radius:50px;font-size:13px;font-weight:600;
-  backdrop-filter:blur(18px);opacity:0;
-  transition:all .3s cubic-bezier(.16,1,.3,1);
+  position:fixed;bottom:78px;left:50%;
+  transform:translateX(-50%) translateY(10px);
+  z-index:99;padding:10px 20px;border-radius:50px;
+  font-size:13px;font-weight:600;backdrop-filter:blur(18px);
+  opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);
   white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:7px}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.ok{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.28);color:#6ee7b7}
 .toast.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.28);color:#fca5a5}
-.toast.info{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.28);color:#c4b5fd}
-
-/* loading */
-.skeleton{
-  background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.07) 50%,rgba(255,255,255,.04) 75%);
-  background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:10px;height:54px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* refresh btn */
-.refresh-btn{
-  margin:10px 14px 0;padding:7px;border-radius:8px;border:1px dashed rgba(124,58,237,.25);
-  background:transparent;color:var(--t3);font-family:'Tajawal',sans-serif;font-size:11px;
-  cursor:pointer;transition:all .2s;width:calc(100% - 28px);display:flex;align-items:center;justify-content:center;gap:5px}
-.refresh-btn:hover{background:rgba(124,58,237,.08);color:var(--t1);border-color:rgba(124,58,237,.4)}
-
-/* scrollbar global */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
-
-/* responsive */
-@media(max-width:640px){
-  .side{width:240px}
-  .chat-hdr-actions .hdr-btn span{display:none}
-}
-@media(max-width:480px){
-  .shell{flex-direction:column}
-  .side{width:100%;height:220px;border-left:none;border-bottom:1px solid var(--border)}
-  .sessions-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden}
-  .sess-item{min-width:160px;border-bottom:none;border-left:1px solid var(--border)}
-  .sess-item.active{border-right:none;border-top:3px solid var(--v)}
-  .search-wrap{display:none}
-}
 </style>
 </head>
 <body>
+<canvas id="c"></canvas>
 
-<div class="shell">
+<div class="app">
 
-  <!-- ══ SIDEBAR ══ -->
-  <div class="side">
-    <div class="side-head">
-      <div class="side-title">🎮 لوحة الدعم الفني</div>
-      <div class="side-sub">إدارة محادثات العملاء</div>
-    </div>
-
-    <div class="search-wrap">
-      <input class="search" id="searchInput" placeholder="🔍 بحث في المحادثات..." oninput="filterSessions()">
-    </div>
-
-    <!-- Stats bar -->
-    <div class="stats-bar" id="statsBar">
-      <div class="stat"><div class="stat-n purple" id="statTotal">—</div><div class="stat-l">محادثة</div></div>
-      <div class="stat"><div class="stat-n amber" id="statOpen">—</div><div class="stat-l">بانتظار رد</div></div>
-      <div class="stat"><div class="stat-n green" id="statReplied">—</div><div class="stat-l">تم الرد</div></div>
-    </div>
-
-    <button class="refresh-btn" onclick="loadSessions()">↻ تحديث القائمة</button>
-
-    <div class="sessions-list" id="sessionsList">
-      <div style="padding:20px 14px;display:flex;flex-direction:column;gap:8px">
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton" style="height:40px"></div>
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="av-ring spin-ring">
+      <div class="av-inner">
+        <img src="https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=200&h=200&fit=crop&crop=face"
+          alt="agent"
+          onerror="this.src='https://i.postimg.cc/zfcqRQYc/images-(5).png'">
       </div>
+      <div class="online-dot"></div>
+    </div>
+    <div class="hdr-info">
+      <div class="hdr-name">فريق الدعم الفني 🎮</div>
+      <div class="hdr-st">متصل الآن — يرد خلال دقائق</div>
     </div>
   </div>
 
-  <!-- ══ MAIN ══ -->
-  <div class="main" id="main">
-    <div class="no-sel" id="noSel">
-      <div class="icon">💬</div>
-      <p>اختر محادثة من القائمة للبدء</p>
+  <!-- MESSAGES -->
+  <div class="msgs" id="msgs">
+    <!-- Welcome card -->
+    <div class="welcome">
+      <div class="wlc-ring">
+        <div class="wlc-inner">
+          <img src="https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=200&h=200&fit=crop&crop=face"
+            alt="agent"
+            onerror="this.src='https://i.postimg.cc/zfcqRQYc/images-(5).png'">
+        </div>
+      </div>
+      <div class="wlc-title">مرحباً! كيف نساعدك؟ 👋</div>
+      <div class="wlc-sub">أرسل رسالتك وسيرد عليك فريقنا في أقرب وقت<br>محادثتك محفوظة دائماً 🔒</div>
+    </div>
+
+    <!-- Typing indicator (persistent element) -->
+    <div class="typing" id="typing">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <span class="typing-lbl">فريق الدعم يكتب...</span>
+    </div>
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="bar">
+    <div class="bar-row">
+      <div class="tawrap">
+        <textarea class="ta" id="ta" placeholder="اكتب رسالتك..." rows="1"
+          oninput="resizeTA(this)" onkeydown="onKey(event)"></textarea>
+        <div class="gline"></div>
+      </div>
+      <button class="sbtn" id="sbtn" onclick="sendMsg()">
+        <svg id="sico" viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        <div class="spin" id="spin"></div>
+      </button>
     </div>
   </div>
 
@@ -285,314 +280,237 @@ const db = supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxja3d3dGZxYWlpaGFxbHd2Yml6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTkzODUsImV4cCI6MjA5MTczNTM4NX0.uN_1oKSTCIrnGwCdPz41x20xnMb4CyKXoTqYXO9vbTE'
 );
 
-let allSessions = [];
-let activeSid   = null;
-let sending     = false;
+/* ════ SESSION ID — واحد لكل جهاز يتحمل دايماً ════ */
+function getSessionId() {
+  let sid = localStorage.getItem('sup_sid');
+  if (!sid) {
+    sid = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem('sup_sid', sid);
+  }
+  return sid;
+}
+const SESSION_ID = getSessionId();
+
+let busy = false;
+let sessionMessages = []; // local cache
+
+/* ════ PARTICLES ════ */
+(()=>{
+  const cv=document.getElementById('c'),cx=cv.getContext('2d');
+  let W,H,pts=[];
+  const rsz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};
+  rsz();window.addEventListener('resize',rsz);
+  const hs=[220,260,180,300];
+  class P{
+    reset(){this.x=Math.random()*W;this.y=Math.random()*H;
+      this.vx=(Math.random()-.5)*.22;this.vy=(Math.random()-.5)*.22;
+      this.r=Math.random()*1.1+.3;this.a=Math.random()*.38+.1;
+      this.h=hs[Math.floor(Math.random()*hs.length)]}
+    tick(){this.x+=this.vx;this.y+=this.vy;
+      if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset()}
+    draw(){cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      cx.fillStyle=`hsla(${this.h},100%,72%,${this.a})`;cx.fill()}
+  }
+  for(let i=0;i<65;i++){const p=new P();p.reset();pts.push(p)}
+  (function loop(){
+    cx.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.tick();p.draw()});
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<95){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);
+        cx.strokeStyle=`rgba(124,58,237,${.08*(1-d/95)})`;cx.lineWidth=.4;cx.stroke()}}
+    requestAnimationFrame(loop)
+  })();
+})();
 
 /* ════ HELPERS ════ */
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
-
-function fmtTime(ts){
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function timeStr(ts){
   return new Date(ts).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})
 }
-function fmtDate(ts){
-  const d=new Date(ts), today=new Date();
+function dateStr(ts){
+  const d=new Date(ts);
+  const today=new Date();
   if(d.toDateString()===today.toDateString()) return 'اليوم';
-  const y=new Date(today); y.setDate(today.getDate()-1);
-  if(d.toDateString()===y.toDateString()) return 'أمس';
-  return d.toLocaleDateString('ar-EG',{weekday:'short',day:'numeric',month:'short'});
+  return d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'short'});
 }
-function relativeTime(iso){
-  const diff = Date.now() - new Date(iso).getTime();
-  const m = Math.floor(diff/60000);
-  if(m<1) return 'الآن';
-  if(m<60) return `منذ ${m} د`;
-  const h=Math.floor(m/60);
-  if(h<24) return `منذ ${h} س`;
-  return `منذ ${Math.floor(h/24)} ي`;
-}
+function resizeTA(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}}
+function scrollBot(){const m=document.getElementById('msgs');m.scrollTop=m.scrollHeight}
 
-function showToast(msg, type='ok'){
+function showToast(msg,type='ok'){
   const t=document.getElementById('toast');
-  const ic={ok:'✓',err:'✕',info:'ℹ'};
-  t.innerHTML=`<span>${ic[type]||'•'}</span><span>${msg}</span>`;
+  t.innerHTML=`<span>${type==='ok'?'✓':'✕'}</span><span>${msg}</span>`;
   t.className=`toast ${type} on`;
-  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),3000);
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3200)
 }
 
-function scrollChatBottom(){
-  const el=document.getElementById('chatMsgs');
-  if(el) el.scrollTop=el.scrollHeight;
+/* ════ TYPING ════ */
+function showTyping(ms=2400){
+  const t=document.getElementById('typing');
+  const msgs=document.getElementById('msgs');
+  msgs.appendChild(t); // always last
+  t.classList.add('on'); scrollBot();
+  setTimeout(()=>t.classList.remove('on'),ms)
 }
 
-function resizeTA(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,110)+'px';
+/* ════ RENDER BUBBLE ════ */
+const AGENT_IMG = 'https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=200&h=200&fit=crop&crop=face';
+
+function renderBubble(msg, animate=true){
+  const isMe = msg.role === 'user';
+  const wrap = document.createElement('div');
+  wrap.className = `brow ${isMe?'me':'ag'}`;
+  if(!animate) wrap.style.animation='none';
+
+  const avHtml = isMe
+    ? `<div class="smav u">أ</div>`
+    : `<div class="smav"><img src="${AGENT_IMG}" alt="a" onerror="this.src='https://i.postimg.cc/zfcqRQYc/images-(5).png'"></div>`;
+
+  const name = isMe ? 'أنت' : 'فريق الدعم';
+  const tick = isMe ? `<span class="tick">✓✓</span>` : '';
+
+  wrap.innerHTML = `
+    <div class="btop">${avHtml}<span class="bname">${name}</span></div>
+    <div class="bubble">${esc(msg.text)}</div>
+    <div class="bmeta">${timeStr(msg.ts)}${tick}</div>`;
+
+  return wrap;
 }
 
-/* ════ LOAD ALL SESSIONS ════ */
-async function loadSessions(){
-  const list=document.getElementById('sessionsList');
-  list.innerHTML=`<div style="padding:16px 14px;display:flex;flex-direction:column;gap:8px">
-    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton" style="height:38px"></div></div>`;
+/* ════ RENDER ALL MESSAGES (with date separators) ════ */
+function renderAll(messages, animate=false){
+  const msgsEl = document.getElementById('msgs');
+  const typing = document.getElementById('typing');
+
+  // remove old bubbles (keep welcome + typing)
+  msgsEl.querySelectorAll('.brow,.date-pill').forEach(el=>el.remove());
+
+  let lastDate = '';
+  messages.forEach(msg=>{
+    const d = dateStr(msg.ts);
+    if(d !== lastDate){
+      lastDate = d;
+      const sep = document.createElement('div');
+      sep.className = 'date-pill';
+      sep.innerHTML = `<span>${d}</span>`;
+      msgsEl.insertBefore(sep, typing);
+    }
+    const bubble = renderBubble(msg, animate);
+    msgsEl.insertBefore(bubble, typing);
+  });
+  scrollBot();
+}
+
+/* ════ AUTO REPLIES ════ */
+const AUTO = [
+  'شكراً لتواصلك! تم استلام رسالتك وسيرد عليك أحد المختصين قريباً. 🛠️',
+  'وصلتنا مشكلتك وسنعمل على حلها في أسرع وقت ممكن! 💪',
+  'تم تسجيل طلبك بنجاح، فريقنا سيتواصل معك خلال دقائق. 🎮',
+  'شكراً! نحن هنا لمساعدتك، سنرد عليك قريباً جداً. ✨',
+];
+
+/* ════ LOAD SESSION FROM SUPABASE ════ */
+async function loadSession(){
+  // show skeleton
+  const msgsEl = document.getElementById('msgs');
+  const sk = document.createElement('div');
+  sk.id='sk';sk.innerHTML='<div class="skeleton"></div><div class="skeleton" style="width:70%;align-self:flex-end"></div>';
+  sk.style.cssText='display:flex;flex-direction:column;gap:10px;padding:0 2px';
+  msgsEl.insertBefore(sk, document.getElementById('typing'));
 
   try {
     const { data, error } = await db
       .from('chat_sessions')
-      .select('*')
-      .order('updated_at',{ascending:false});
+      .select('messages')
+      .eq('session_id', SESSION_ID)
+      .single();
 
-    if(error) throw error;
+    document.getElementById('sk')?.remove();
 
-    allSessions = data || [];
-    renderSessionList(allSessions);
-    updateStats(allSessions);
+    if(error && error.code !== 'PGRST116'){
+      // PGRST116 = not found, which is fine for new users
+      console.error(error);
+      return;
+    }
 
+    if(data && data.messages && data.messages.length > 0){
+      sessionMessages = data.messages;
+      renderAll(sessionMessages, false);
+      showToast('تم استعادة محادثتك السابقة 🔒','ok');
+    }
   } catch(e){
-    list.innerHTML=`<div class="empty-side">⚠️ خطأ في التحميل<br><small style="color:#64748b">${esc(e.message||'')}</small></div>`;
+    document.getElementById('sk')?.remove();
     console.error(e);
   }
 }
 
-function updateStats(sessions){
-  const total=sessions.length;
-  let open=0, replied=0;
-  sessions.forEach(s=>{
-    const msgs=Array.isArray(s.messages)?s.messages:[];
-    const last=msgs[msgs.length-1];
-    if(!last || last.role==='user') open++;
-    else replied++;
-  });
-  document.getElementById('statTotal').textContent=total;
-  document.getElementById('statOpen').textContent=open;
-  document.getElementById('statReplied').textContent=replied;
-}
-
-function renderSessionList(sessions){
-  const list=document.getElementById('sessionsList');
-  if(!sessions.length){
-    list.innerHTML='<div class="empty-side">📭 لا توجد محادثات بعد</div>';
-    return;
-  }
-  list.innerHTML='';
-  sessions.forEach((s,i)=>{
-    const msgs=Array.isArray(s.messages)?s.messages:[];
-    const last=msgs[msgs.length-1];
-    const lastText=last?last.text:'لا توجد رسائل';
-    const hasUnread=last&&last.role==='user';
-    const userMsgsCount=msgs.filter(m=>m.role==='user').length;
-
-    // short display id
-    const shortId=s.session_id.replace('u_','').slice(0,10)+'…';
-
-    const item=document.createElement('div');
-    item.className=`sess-item${activeSid===s.session_id?' active':''}`;
-    item.dataset.sid=s.session_id;
-    item.style.animationDelay=(i*.04)+'s';
-    item.innerHTML=`
-      <div class="sess-av">${s.session_id.slice(-1).toUpperCase()}</div>
-      <div class="sess-info">
-        <div class="sess-id">مستخدم #${i+1}</div>
-        <div class="sess-preview">${esc(lastText.slice(0,40))}${lastText.length>40?'…':''}</div>
-      </div>
-      <div class="sess-meta">
-        <div class="sess-time">${relativeTime(s.updated_at)}</div>
-        ${hasUnread?`<div class="sess-badge">${userMsgsCount}</div>`:''}
-      </div>`;
-
-    item.onclick=()=>openSession(s.session_id);
-    list.appendChild(item);
-  });
-}
-
-function filterSessions(){
-  const q=document.getElementById('searchInput').value.trim().toLowerCase();
-  if(!q){ renderSessionList(allSessions); return; }
-  const filtered=allSessions.filter(s=>{
-    const msgs=Array.isArray(s.messages)?s.messages:[];
-    return msgs.some(m=>m.text&&m.text.toLowerCase().includes(q)) ||
-           s.session_id.toLowerCase().includes(q);
-  });
-  renderSessionList(filtered);
-}
-
-/* ════ OPEN SESSION ════ */
-function openSession(sid){
-  activeSid=sid;
-  // highlight active
-  document.querySelectorAll('.sess-item').forEach(el=>{
-    el.classList.toggle('active', el.dataset.sid===sid);
-  });
-
-  const session=allSessions.find(s=>s.session_id===sid);
-  if(!session) return;
-
-  const msgs=Array.isArray(session.messages)?session.messages:[];
-  const lastMsg=msgs[msgs.length-1];
-  const userCount=msgs.filter(m=>m.role==='user').length;
-  const lastUpdate=new Date(session.updated_at).toLocaleString('ar-EG');
-  const shortNum=allSessions.indexOf(session)+1;
-
-  const main=document.getElementById('main');
-  main.innerHTML=`
-    <!-- Chat Header -->
-    <div class="chat-hdr">
-      <div class="chat-hdr-av">${sid.slice(-1).toUpperCase()}</div>
-      <div class="chat-hdr-info">
-        <div class="chat-hdr-name">مستخدم #${shortNum}</div>
-        <div class="chat-hdr-sub">${userCount} رسالة · آخر نشاط: ${relativeTime(session.updated_at)}</div>
-      </div>
-      <div class="chat-hdr-actions">
-        <button class="hdr-btn" onclick="refreshSession('${sid}')">↻ <span>تحديث</span></button>
-      </div>
-    </div>
-
-    <!-- Messages -->
-    <div class="chat-msgs" id="chatMsgs"></div>
-
-    <!-- Reply Bar -->
-    <div class="reply-bar">
-      <div class="reply-label">رد من فريق الدعم</div>
-      <div class="reply-row">
-        <textarea class="reply-ta" id="replyTA" placeholder="اكتب ردك هنا..." rows="1"
-          oninput="resizeTA(this)"
-          onkeydown="if(event.ctrlKey&&event.key==='Enter'){event.preventDefault();submitReply()}"
-        ></textarea>
-        <button class="send-btn" id="sendBtn" onclick="submitReply()">
-          <svg id="sendIco" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          <div class="sbspin" id="sbspin"></div>
-        </button>
-      </div>
-    </div>`;
-
-  renderMessages(msgs);
-}
-
-/* ════ RENDER MESSAGES ════ */
-function renderMessages(msgs){
-  const container=document.getElementById('chatMsgs');
-  if(!container) return;
-  container.innerHTML='';
-  if(!msgs.length){
-    container.innerHTML='<div style="text-align:center;color:#475569;font-size:13px;padding:30px">لا توجد رسائل بعد</div>';
-    return;
-  }
-
-  let lastDate='';
-  msgs.forEach(m=>{
-    const d=fmtDate(m.ts);
-    if(d!==lastDate){
-      lastDate=d;
-      const sep=document.createElement('div');
-      sep.className='date-sep'; sep.innerHTML=`<span>${d}</span>`;
-      container.appendChild(sep);
-    }
-    const isAgent=m.role==='agent';
-    const row=document.createElement('div');
-    row.className=`mrow ${m.role==='user'?'user':'agent'}`;
-    row.style.animation='none'; // no animation for history
-    row.innerHTML=`
-      <div class="mtop">
-        <span class="role-icon">${isAgent?'🎧':'👤'}</span>
-        <span class="role-lbl">${isAgent?'فريق الدعم':'العميل'}</span>
-      </div>
-      <div class="mbubble">${esc(m.text)}</div>
-      <div class="mmeta">${fmtTime(m.ts)}${isAgent?'<span class="agent-tick">✓✓</span>':''}</div>`;
-    container.appendChild(row);
-  });
-
-  scrollChatBottom();
-}
-
-/* ════ REFRESH SINGLE SESSION ════ */
-async function refreshSession(sid){
+/* ════ SAVE SESSION TO SUPABASE ════ */
+async function saveSession(){
   try {
-    const { data, error }=await db.from('chat_sessions').select('*').eq('session_id',sid).single();
+    // upsert: إذا موجود يحدث، إذا مش موجود ينشئ
+    const { error } = await db
+      .from('chat_sessions')
+      .upsert(
+        { session_id: SESSION_ID, messages: sessionMessages, updated_at: new Date().toISOString() },
+        { onConflict: 'session_id' }
+      );
     if(error) throw error;
-    // update in allSessions
-    const idx=allSessions.findIndex(s=>s.session_id===sid);
-    if(idx>-1) allSessions[idx]=data;
-    const msgs=Array.isArray(data.messages)?data.messages:[];
-    renderMessages(msgs);
-    showToast('تم التحديث','ok');
   } catch(e){
-    showToast('خطأ: '+(e.message||''),'err');
+    const m = [e.message, e.details, e.hint].filter(Boolean).join(' ');
+    console.error('Save error:', m);
+    showToast('تعذّر الحفظ: '+m,'err');
   }
 }
 
-/* ════ SUBMIT REPLY ════ */
-async function submitReply(){
-  if(sending||!activeSid) return;
-  const ta=document.getElementById('replyTA');
-  const text=ta.value.trim();
-  if(!text){ ta.focus(); showToast('اكتب ردك أولاً','err'); return; }
+/* ════ SEND MESSAGE ════ */
+async function sendMsg(){
+  if(busy) return;
+  const ta = document.getElementById('ta');
+  const text = ta.value.trim();
+  if(!text){ ta.focus(); showToast('اكتب رسالتك أولاً','err'); return; }
 
-  sending=true;
-  const btn=document.getElementById('sendBtn');
-  const ico=document.getElementById('sendIco');
-  const sp=document.getElementById('sbspin');
+  busy = true;
+  const btn=document.getElementById('sbtn');
+  const ico=document.getElementById('sico');
+  const sp=document.getElementById('spin');
   btn.disabled=true; ico.style.display='none'; sp.style.display='block';
 
-  try {
-    // get latest from DB
-    const { data: fresh, error: fetchErr }=await db
-      .from('chat_sessions').select('messages').eq('session_id',activeSid).single();
-    if(fetchErr) throw fetchErr;
+  // Add user message to local + render
+  const userMsg = { role:'user', text, ts: Date.now() };
+  sessionMessages.push(userMsg);
+  const msgsEl = document.getElementById('msgs');
+  const typing = document.getElementById('typing');
+  const bubble = renderBubble(userMsg, true);
+  msgsEl.insertBefore(bubble, typing);
+  scrollBot();
 
-    const existingMsgs=Array.isArray(fresh.messages)?fresh.messages:[];
-    const agentMsg={ role:'agent', text, ts:Date.now() };
-    const updatedMsgs=[...existingMsgs, agentMsg];
+  ta.value=''; ta.style.height='auto';
 
-    const { error: saveErr }=await db
-      .from('chat_sessions')
-      .update({ messages:updatedMsgs, updated_at:new Date().toISOString() })
-      .eq('session_id',activeSid);
+  // Save to Supabase (user message)
+  await saveSession();
 
-    if(saveErr) throw saveErr;
+  btn.disabled=false; ico.style.display='block'; sp.style.display='none';
+  busy = false;
 
-    // update local cache
-    const idx=allSessions.findIndex(s=>s.session_id===activeSid);
-    if(idx>-1) allSessions[idx].messages=updatedMsgs;
+  // Auto reply
+  setTimeout(()=>showTyping(2200), 500);
+  setTimeout(async ()=>{
+    const replyText = AUTO[Math.floor(Math.random()*AUTO.length)];
+    const agentMsg = { role:'agent', text: replyText, ts: Date.now() };
+    sessionMessages.push(agentMsg);
 
-    // render new message with animation
-    const container=document.getElementById('chatMsgs');
-    const row=document.createElement('div');
-    row.className='mrow agent';
-    row.innerHTML=`
-      <div class="mtop"><span class="role-icon">🎧</span><span class="role-lbl">فريق الدعم</span></div>
-      <div class="mbubble">${esc(text)}</div>
-      <div class="mmeta">${fmtTime(Date.now())}<span class="agent-tick">✓✓</span></div>`;
-    container.appendChild(row);
-    scrollChatBottom();
+    const rb = renderBubble(agentMsg, true);
+    msgsEl.insertBefore(rb, document.getElementById('typing'));
+    scrollBot();
 
-    ta.value=''; ta.style.height='auto';
-    showToast('تم إرسال الرد ✓','ok');
-
-    // update sidebar
-    renderSessionList(allSessions);
-    updateStats(allSessions);
-    // re-highlight active
-    document.querySelectorAll('.sess-item').forEach(el=>{
-      el.classList.toggle('active', el.dataset.sid===activeSid);
-    });
-
-  } catch(e){
-    const m=[e.message,e.details,e.hint].filter(Boolean).join(' ')||JSON.stringify(e);
-    showToast('خطأ: '+m,'err');
-    console.error(e);
-  } finally {
-    sending=false; btn.disabled=false; ico.style.display='block'; sp.style.display='none';
-  }
+    // Save with agent reply
+    await saveSession();
+  }, 2900);
 }
 
-/* ════ AUTO REFRESH every 30s ════ */
-setInterval(()=>{
-  loadSessions();
-  if(activeSid) refreshSession(activeSid);
-}, 30000);
-
 /* ════ INIT ════ */
-loadSessions();
+loadSession();
 </script>
 </body>
 </html>
